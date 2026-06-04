@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regents Global History Prep App</title>
+    <style>
+        :root {
+            --bg-color: #121824;
+            --card-color: #1e293b;
+            --accent-color: #38bdf8;
+            --text-color: #f8fafc;
+            --correct-color: #22c55e;
+            --incorrect-color: #ef4444;
+            --paper-bg: #f8fafc;
+            --paper-text: #0f172a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .game-container {
+            background-color: var(--card-color);
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid #334155;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+
+        .hub-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        button {
+            background-color: #334155;
+            color: white;
+            border: 1px solid #475569;
+            padding: 16px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+
+        button:hover:not(:disabled) {
+            background-color: #475569;
+            border-color: var(--accent-color);
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .room-btn {
+            text-align: center;
+            font-weight: bold;
+            background-color: #0f172a;
+            border-color: #38bdf8;
+        }
+        
+        .room-btn:hover {
+            background-color: var(--accent-color) !important;
+            color: #0f172a;
+        }
+
+        .stimulus-card {
+            background-color: var(--paper-bg);
+            color: var(--paper-text);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 6px solid #64748b;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .source-credit {
+            font-size: 12px;
+            color: #475569;
+            margin-top: 10px;
+            font-style: italic;
+            border-top: 1px solid #cbd5e1;
+            padding-top: 5px;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .lifeline-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #334155;
+            padding-top: 15px;
+        }
+
+        .lifeline-btn {
+            background-color: #1e1b4b;
+            border-color: #4338ca;
+            flex: 1;
+            text-align: center;
+            font-size: 14px;
+        }
+        .lifeline-btn:hover:not(:disabled) {
+            background-color: #312e81;
+        }
+
+        .hint-text {
+            background-color: #0f172a;
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 10px;
+            display: none;
+            font-size: 14px;
+            border: 1px dashed var(--accent-color);
+        }
+
+        .feedback {
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 15px;
+            min-height: 24px;
+        }
+
+        .progress-bar {
+            background-color: #0f172a;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: var(--accent-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <!-- MASTER HUB MENU -->
+    <div id="hub-screen">
+        <h1>⏳ NYS Global History Hub ⏳</h1>
+        <p style="text-align: center; color: #94a3b8;">Select an era room to challenge proficiency. Authentic Regents Exam Source Materials Required.</p>
+        <div class="hub-grid">
+            <button class="room-btn" onclick="startRoom('industrial')">⚙️ Room 2: Industrial Revolution (Active)</button>
+            <button class="room-btn" onclick="startRoom('imperialism')">🌍 Room 3: Global Imperialism (Active)</button>
+            <button class="room-btn" disabled>🔒 Room 1: Enlightenment & Revolutions (Locked)</button>
+            <button class="room-btn" disabled>🔒 Room 4: Unresolved Global Conflicts (Locked)</button>
+        </div>
+    </div>
+
+    <!-- ACTIVE STIMULUS/QUESTION WORKSPACE -->
+    <div id="game-screen" class="hidden">
+        <h2 id="room-title">Era Room</h2>
+        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        
+        <div id="stimulus-container" class="stimulus-card">
+            <div id="stimulus-text" style="white-space: pre-line; line-height: 1.6; font-size: 15px;"></div>
+            <div id="source-metadata" class="source-credit"></div>
+        </div>
+        
+        <p id="question" style="font-weight: bold; font-size: 16px; margin-bottom: 15px;"></p>
+        
+        <div id="choices" class="choices-grid"></div>
+        
+        <div id="hint-box" class="hint-text"></div>
+        <div id="feedback" class="feedback"></div>
+
+        <div class="lifeline-container">
+            <button id="btn-hint" class="lifeline-btn" onclick="useHint()">💡 Lifeline: Request Hint</button>
+            <button id="btn-fifty" class="lifeline-btn" onclick="useFiftyFifty()">🌓 Lifeline: 50/50 Elimination</button>
+        </div>
+        
+        <button id="btn-next" class="hidden" style="width:100%; margin-top:15px; text-align:center; background-color:var(--correct-color); font-weight:bold;" onclick="nextQuestion()">Advance to Next Document ➡️</button>
+    </div>
+
+    <!-- ROOM SUCCESS SCREEN -->
+    <div id="victory-screen" class="hidden" style="text-align: center;">
+        <h1 style="color: var(--correct-color);">🏆 Proficiency Achieved! 🏆</h1>
+        <p>Excellent data analysis. You successfully met NYS Social Studies standard tracking specifications for this era.</p>
+        <button class="room-btn" style="width: 100%; text-align: center; margin-top: 20px;" onclick="returnToHub()">Return to Temporal Hub</button>
+    </div>
+</div>
+
+<script>
+    // Authentic Regents Exam Database
+    const gameData = {
+        industrial: {
+            title: "⚙️ Room 2: The Industrial Revolution",
+            questions: [
+                {
+                    stimulus: "... This agrarian revolution, as it has been called, was every bit as important as the industrial revolution. The availability of good food, combined with improved infant survival and the disappearance of epidemics, helped more young live to adulthood and allowed adults to live longer. This meant that, by the middle of the eighteenth century, more people were having more children, and the population grew quickly thereafter.",
+                    source: "Source: James A. Corrick, The Industrial Revolution, Lucent Books, 1998 (NYS Global History Regents)",
+                    question: "Which situation was a result of the events described in this passage?",
+                    choices: [
+                        { text: "(1) migration of people to rural areas", correct: false },
+                        { text: "(2) population increase", correct: true },
+                        { text: "(3) development of Marxist ideals", correct: false },
+                        { text: "(4) widespread famine in Ireland", correct: false }
+                    ],
+                    hint: "Look closely at the final sentence. What demographic trend does the text explicitly note as a result of the availability of good food?",
+                    fiftyWrong: [0, 2]
+                },
+                {
+                    stimulus: "Sadler: When did you first begin to work in mills?\nCooper: When I was ten years of age.\nSadler: What were your usual hours of working?\nCooper: We began at five in the morning and stopped at nine in the night.\nSadler: What time did you have for meals?\nCooper: We had just one period of forty minutes in the sixteen hours. That was at noon.\nSadler: What means were taken to keep you awake and attentive?\nCooper: At times we were frequently strapped [beaten].",
+                    source: "Source: Testimonies Before the Sadler Committee, British Parliamentary Records, 1832 (NYS Global History Regents)",
+                    question: "A historian could best use this document to study which aspect of the Industrial Revolution?",
+                    choices: [
+                        { text: "(1) benefits of the domestic cottage industry system", correct: false },
+                        { text: "(2) technological innovations in electrical infrastructure", correct: false },
+                        { text: "(3) social impacts of factory working conditions on children", correct: true },
+                        { text: "(4) strategies used by workers to legally form early trade unions", correct: false }
+                    ],
+                    hint: "Consider the age of the witness (Cooper) and the grueling nature of the sixteen-hour workday rules being investigated.",
+                    fiftyWrong: [0, 1]
+                }
+            ]
+        },
+        imperialism: {
+            title: "🌍 Room 3: Global Imperialism",
+            questions: [
+                {
+                    stimulus: "The Partition of Africa began in earnest with the Berlin Conference of 1884-1885... The purpose of the conference was to establish the rules for the exploitation of the continent. European powers met to carve up Africa into colonies. Africans were not invited or made privy to their decisions. The resulting borders divided ethnic groups and forced rival tribes to live together under European colonial rule.",
+                    source: "Source: Based on NYS Global History and Geography Regents Examination Documents",
+                    question: "What was a major result of the event described in this passage?",
+                    choices: [
+                        { text: "(1) African nations formed a united military front against imperialism", correct: false },
+                        { text: "(2) European powers divided Africa into colonies without regard for ethnic boundaries", correct: true },
+                        { text: "(3) The Atlantic slave trade was officially re-established", correct: false },
+                        { text: "(4) Great Britain lost all of its colonial territories in Africa", correct: false }
+                    ],
+                    hint: "The text states that 'Africans were not invited' and mentions 'carving up' the continent. Which choice best matches this lack of African representation?",
+                    fiftyWrong: [0, 2]
+                },
+                {
+                    stimulus: "... The immediate cause of the Sepoy Mutiny was the introduction of the new Enfield rifle. A rumor spread among the sepoys that the grease used to lubricate the cartridges was a mixture of pigs' and cows' lard; thus, to have oral contact with it was an insult to both Muslims and Hindus. The British quickly realized their mistake and offered to replace the cartridges, but the damage was already done.",
+                    source: "Source: NYS Global History Regents Examination, August 2019",
+                    question: "This passage describes an event that was primarily caused by which factor?",
+                    choices: [
+                        { text: "(1) British insensitivity to Indian religious practices", correct: true },
+                        { text: "(2) Indian desire to spread Hinduism and Islam to Europe", correct: false },
+                        { text: "(3) British refusal to employ Indian soldiers in the military", correct: false },
+                        { text: "(4) The lack of technological advancement in the British military", correct: false }
+                    ],
+                    hint: "Pigs are forbidden in Islam, and cows are sacred in Hinduism. Forcing soldiers to bite cartridges greased with these fats showed a lack of respect for what?",
+                    fiftyWrong: [2, 3]
+                }
+            ]
+        }
+    };
+
+    // State Tracking
+    let currentRoom = null;
+    let currentQuestionIdx = 0;
+    let lifelines = { hint: true, fiftyFifty: true };
+
+    function startRoom(roomKey) {
+        currentRoom = gameData[roomKey];
+        currentQuestionIdx = 0;
+        lifelines = { hint: true, fiftyFifty: true };
+        
+        document.getElementById('hub-screen').classList.add('hidden');
+        document.getElementById('game-screen').classList.remove('hidden');
+        document.getElementById('room-title').innerText = currentRoom.title;
+        
+        updateLifelineButtons();
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        document.getElementById('feedback').innerText = "";
+        document.getElementById('hint-box').style.display = "none";
+        document.getElementById('btn-next').classList.add('hidden');
+        
+        let qData = currentRoom.questions[currentQuestionIdx];
+        document.getElementById('stimulus-text').innerText = qData.stimulus;
+        document.getElementById('source-metadata').innerText = qData.source;
+        document.getElementById('question').innerText = qData.question;
+        
+        // Progress bar
+        let pct = (currentQuestionIdx / currentRoom.questions.length) * 100;
+        document.getElementById('progress-fill').style.width = pct + "%";
+
+        // Render options
+        let choicesDiv = document.getElementById('choices');
+        choicesDiv.innerHTML = "";
+        qData.choices.forEach((choice, index) => {
+            let btn = document.createElement('button');
+            btn.innerText = choice.text;
+            btn.id = `choice-${index}`;
+            btn.onclick = () => checkAnswer(choice.correct, index);
+            choicesDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(isCorrect, index) {
+        let qData = currentRoom.questions[currentQuestionIdx];
+        let feedback = document.getElementById('feedback');
+        
+        // Disable choices after selection
+        qData.choices.forEach((_, i) => {
+            document.getElementById(`choice-${i}`).disabled = true;
+        });
+
+        if (isCorrect) {
+            feedback.innerText = "🎯 CORRECT! Your historical analysis is accurate.";
+            feedback.style.color = "var(--correct-color)";
+            document.getElementById(`choice-${index}`).style.backgroundColor = "var(--correct-color)";
+            document.getElementById('btn-next').classList.remove('hidden');
+        } else {
+            feedback.innerText = "❌ INCORRECT. Review the document and try again.";
+            feedback.style.color = "var(--incorrect-color)";
+            document.getElementById(`choice-${index}`).style.backgroundColor = "var(--incorrect-color)";
+            
+            // Allow retry after 2 seconds
+            setTimeout(() => {
+                qData.choices.forEach((_, i) => {
+                    document.getElementById(`choice-${i}`).disabled = false;
+                    document.getElementById(`choice-${i}`).style.backgroundColor = "#334155";
+                });
+                feedback.innerText = "";
+            }, 2000);
+        }
+    }
+
+    function useHint() {
+        if (!lifelines.hint) return;
+        lifelines.hint = false;
+        updateLifelineButtons();
+        
+        let hintBox = document.getElementById('hint-box');
+        hintBox.innerText = "🔎 HINT: " + currentRoom.questions[currentQuestionIdx].hint;
+        hintBox.style.display = "block";
+    }
+
+    function useFiftyFifty() {
+        if (!lifelines.fiftyFifty) return;
+        lifelines.fiftyFifty = false;
+        updateLifelineButtons();
+        
+        let qData = currentRoom.questions[currentQuestionIdx];
+        qData.fiftyWrong.forEach(index => {
+            let btn = document.getElementById(`choice-${index}`);
+            if(btn) {
+                btn.style.opacity = "0";
+                btn.disabled = true;
+                btn.style.cursor = "default";
+            }
+        });
+    }
+
+    function updateLifelineButtons() {
+        document.getElementById('btn-hint').disabled = !lifelines.hint;
+        document.getElementById('btn-fifty').disabled = !lifelines.fiftyFifty;
+    }
+
+    function nextQuestion() {
+        currentQuestionIdx++;
+        if (currentQuestionIdx >= currentRoom.questions.length) {
+            // Room Complete! Make the progress bar 100% just before hiding
+            document.getElementById('progress-fill').style.width = "100%";
+            setTimeout(() => {
+                document.getElementById('game-screen').classList.add('hidden');
+                document.getElementById('victory-screen').classList.remove('hidden');
+            }, 500);
+        } else {
+            loadQuestion();
+        }
+    }
+
+    function returnToHub() {
+        document.getElementById('victory-screen').classList.add('hidden');
+        document.getElementById('hub-screen').classList.remove('hidden');
+    }
+</script>
+
+</body>
+</html>
