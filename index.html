@@ -1,413 +1,2201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Regents Global History Prep App</title>
-    <style>
-        :root {
-            --bg-color: #121824;
-            --card-color: #1e293b;
-            --accent-color: #38bdf8;
-            --text-color: #f8fafc;
-            --correct-color: #22c55e;
-            --incorrect-color: #ef4444;
-            --paper-bg: #f8fafc;
-            --paper-text: #0f172a;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .game-container {
-            background-color: var(--card-color);
-            border-radius: 12px;
-            padding: 30px;
-            width: 100%;
-            max-width: 700px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid #334155;
-        }
-
-        h1, h2 {
-            text-align: center;
-            color: var(--accent-color);
-            margin-top: 0;
-        }
-
-        .hub-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        button {
-            background-color: #334155;
-            color: white;
-            border: 1px solid #475569;
-            padding: 16px;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-
-        button:hover:not(:disabled) {
-            background-color: #475569;
-            border-color: var(--accent-color);
-        }
-
-        button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .room-btn {
-            text-align: center;
-            font-weight: bold;
-            background-color: #0f172a;
-            border-color: #38bdf8;
-        }
-        
-        .room-btn:hover {
-            background-color: var(--accent-color) !important;
-            color: #0f172a;
-        }
-
-        .stimulus-card {
-            background-color: var(--paper-bg);
-            color: var(--paper-text);
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border-left: 6px solid #64748b;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .source-credit {
-            font-size: 12px;
-            color: #475569;
-            margin-top: 10px;
-            font-style: italic;
-            border-top: 1px solid #cbd5e1;
-            padding-top: 5px;
-        }
-
-        .choices-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .lifeline-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 20px;
-            border-top: 1px solid #334155;
-            padding-top: 15px;
-        }
-
-        .lifeline-btn {
-            background-color: #1e1b4b;
-            border-color: #4338ca;
-            flex: 1;
-            text-align: center;
-            font-size: 14px;
-        }
-        .lifeline-btn:hover:not(:disabled) {
-            background-color: #312e81;
-        }
-
-        .hint-text {
-            background-color: #0f172a;
-            padding: 12px;
-            border-radius: 6px;
-            margin-top: 10px;
-            display: none;
-            font-size: 14px;
-            border: 1px dashed var(--accent-color);
-        }
-
-        .feedback {
-            text-align: center;
-            font-weight: bold;
-            font-size: 18px;
-            margin-top: 15px;
-            min-height: 24px;
-        }
-
-        .progress-bar {
-            background-color: #0f172a;
-            height: 8px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background-color: var(--accent-color);
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .hidden {
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regents Global History Campaign Quest</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .heading-font {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .campaign-map {
+      background: radial-gradient(125% 125% at 50% 10%, #030712 40%, #090d16 100%);
+    }
+    .level-node {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .level-node:hover:not(:disabled) {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.25);
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #090d16;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #fbbf24;
+    }
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between campaign-map select-none">
 
-<div class="game-container">
-    <!-- MASTER HUB MENU -->
-    <div id="hub-screen">
-        <h1>⏳ NYS Global History Hub ⏳</h1>
-        <p style="text-align: center; color: #94a3b8;">Select an era room to challenge proficiency. Authentic Regents Exam Source Materials Required.</p>
-        <div class="hub-grid">
-            <button class="room-btn" onclick="startRoom('industrial')">⚙️ Room 2: Industrial Revolution (Active)</button>
-            <button class="room-btn" onclick="startRoom('imperialism')">🌍 Room 3: Global Imperialism (Active)</button>
-            <button class="room-btn" onclick="startRoom('Enlightenment & Revolutions') Room 1: Enlightenment & Revolutions (Active)</button>
-            <button class="room-btn" disabled>🔒 Room 4: Unresolved Global Conflicts (Locked)</button>
+  <header class="bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-4 sticky top-0 z-30 shadow-lg no-print">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-lg md:text-xl font-extrabold text-amber-400 heading-font tracking-tight flex items-center gap-2">
+          <span>⚔️</span> REGENTS GLOBAL HISTORY 90-STAGE CAMPAIGN
+        </h1>
+        <p class="text-[10px] text-slate-400">Classroom Interactive Resource: Defeat 15 Progressive Levels across 6 Historical Categories</p>
+      </div>
+      
+      <!-- Student Worksheet Info Panel -->
+      <div class="flex flex-wrap items-center gap-3 bg-slate-950/80 p-2 rounded-xl border border-slate-800 text-sm w-full md:w-auto">
+        <div class="flex items-center gap-2 flex-1 md:flex-initial">
+          <span class="text-amber-400 font-bold whitespace-nowrap text-[11px]">STUDENT:</span>
+          <input type="text" id="student-name" placeholder="Enter Full Name" class="bg-transparent border-b border-slate-700 focus:border-amber-400 focus:outline-none px-1 text-amber-100 placeholder-slate-700 text-xs w-full md:w-40">
         </div>
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 font-bold text-[11px]">PERIOD:</span>
+          <input type="text" id="student-period" placeholder="--" class="bg-transparent border-b border-slate-700 focus:border-amber-400 focus:outline-none px-1 text-amber-100 placeholder-slate-700 text-xs w-10 text-center">
+        </div>
+        <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-[10px] text-slate-300 px-2.5 py-1.5 rounded-lg transition border border-slate-700 font-bold uppercase tracking-wider">
+          🖨️ Print Sheet
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="setup-screen" class="max-w-md mx-auto my-auto p-6 bg-slate-900/95 border border-slate-800 rounded-2xl shadow-2xl space-y-6 mt-12 mb-12 relative z-10 no-print">
+    <div class="text-center space-y-2">
+      <div class="bg-amber-400/10 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto border border-amber-400/20">
+        <span class="text-3xl">🛡️</span>
+      </div>
+      <h2 class="text-xl font-extrabold text-amber-400 heading-font">NYS Regents Prep Guild</h2>
+      <p class="text-xs text-slate-400">Collaborate with your squad or play solo to conquer all 90 stages across 6 categories!</p>
     </div>
 
-    <!-- ACTIVE STIMULUS/QUESTION WORKSPACE -->
-    <div id="game-screen" class="hidden">
-        <h2 id="room-title">Era Room</h2>
-        <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
-        
-        <div id="stimulus-container" class="stimulus-card">
-            <div id="stimulus-text" style="white-space: pre-line; line-height: 1.6; font-size: 15px;"></div>
-            <div id="source-metadata" class="source-credit"></div>
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Number of Squads/Teams</label>
+        <div class="grid grid-cols-4 gap-2">
+          <button onclick="setTeams(1)" id="team-btn-1" class="team-select-btn py-2 bg-amber-500 text-slate-950 font-bold rounded-xl border-2 border-amber-500 text-xs">1 Team</button>
+          <button onclick="setTeams(2)" id="team-btn-2" class="team-select-btn py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border-2 border-transparent text-xs">2 Teams</button>
+          <button onclick="setTeams(3)" id="team-btn-3" class="team-select-btn py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border-2 border-transparent text-xs">3 Teams</button>
+          <button onclick="setTeams(4)" id="team-btn-4" class="team-select-btn py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border-2 border-transparent text-xs">4 Teams</button>
         </div>
-        
-        <p id="question" style="font-weight: bold; font-size: 16px; margin-bottom: 15px;"></p>
-        
-        <div id="choices" class="choices-grid"></div>
-        
-        <div id="hint-box" class="hint-text"></div>
-        <div id="feedback" class="feedback"></div>
+      </div>
 
-        <div class="lifeline-container">
-            <button id="btn-hint" class="lifeline-btn" onclick="useHint()">💡 Lifeline: Request Hint</button>
-            <button id="btn-fifty" class="lifeline-btn" onclick="useFiftyFifty()">🌓 Lifeline: 50/50 Elimination</button>
+      <div id="team-names-container" class="space-y-2">
+        <label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Team Name</label>
+        <input type="text" id="team-name-input-0" value="Team Alpha" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-100 focus:outline-none focus:border-amber-500 text-xs">
+      </div>
+
+      <div class="pt-2">
+        <button onclick="startGame()" class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold heading-font tracking-wider rounded-xl shadow-lg hover:shadow-amber-500/20 transform hover:-translate-y-0.5 transition-all text-xs">
+          LAUNCH QUEST BOARD
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <main id="game-screen" class="hidden flex-grow max-w-[95vw] mx-auto w-full p-4 space-y-4 relative z-10 no-print">
+    
+    <!-- Scoreboard Dashboard -->
+    <section class="bg-slate-900/80 backdrop-blur-md border border-slate-800 rounded-2xl p-4 flex flex-col md:flex-row justify-between items-center gap-4 shadow-xl">
+      <div class="flex items-center gap-3">
+        <div class="bg-amber-400/15 p-2 rounded-xl border border-amber-400/30">
+          <span class="text-xl inline-block" id="turn-icon">⚔️</span>
         </div>
+        <div>
+          <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Active Guild Team</p>
+          <h3 id="current-turn-display" class="text-md font-extrabold text-amber-400 heading-font">Team Alpha</h3>
+        </div>
+      </div>
+
+      <div id="scoreboard" class="flex flex-wrap gap-2.5 justify-center">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="toggleStudyMode()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 px-4 py-2 rounded-xl text-xs text-slate-300 font-bold transition">
+          📖 Study Sheet Mode
+        </button>
+      </div>
+    </section>
+
+    <!-- Campaign Column Grid (6-column responsive layout) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 pb-6 overflow-x-auto">
+      <div id="campaign-columns-container" class="contents">
+        <!-- Injected Category columns filled with levels 1-15 -->
+      </div>
+    </section>
+  </main>
+
+  <main id="study-mode-screen" class="hidden flex-grow max-w-5xl mx-auto w-full p-4 space-y-6 relative z-10">
+    <div class="flex justify-between items-center border-b border-slate-800 pb-4 no-print">
+      <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2 heading-font">📖 Campaign Study Master Sheet & Rationales</h2>
+      <button onclick="toggleStudyMode()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 px-4 py-2 rounded-xl font-bold text-xs transition">
+        Back to Campaign Map
+      </button>
+    </div>
+    
+    <div id="study-list" class="space-y-6">
+      <!-- Injected dynamically -->
+    </div>
+  </main>
+
+  <div id="question-modal" class="hidden fixed inset-0 bg-slate-950/95 flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-slate-900 border border-amber-400/30 rounded-2xl max-w-4xl w-full p-6 shadow-2xl flex flex-col space-y-4 max-h-[92vh] overflow-y-auto transform scale-95 transition-all duration-300">
+      
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+        <div class="flex items-center gap-2">
+          <span id="modal-level-badge" class="bg-amber-500 text-slate-950 px-2.5 py-1 rounded-lg text-[10px] font-black heading-font">LEVEL 1</span>
+          <span id="modal-category" class="text-amber-400 font-bold tracking-wide uppercase text-xs">CATEGORY</span>
+        </div>
+        <span id="modal-value" class="bg-slate-800 text-amber-300 border border-slate-700 px-3 py-1 rounded-full font-black heading-font text-xs">100 PTS</span>
+      </div>
+
+      <!-- Question Text Context -->
+      <div id="modal-question-content" class="space-y-3">
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/80 text-slate-200">
+          <!-- Stimulus Box (Passage containing verified authors) -->
+          <div id="modal-passage-container" class="hidden mb-3">
+            <p id="modal-passage" class="text-xs italic text-slate-300 whitespace-pre-line leading-relaxed border-b border-slate-800/40 pb-2 font-mono"></p>
+          </div>
+          <p id="modal-question-text" class="font-bold text-sm text-slate-100"></p>
+        </div>
+
+        <!-- Multiple Choice Options -->
+        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <!-- Dynamic Shuffled Answer Buttons -->
+        </div>
+
+        <!-- Hint Panel -->
+        <div class="pt-1">
+          <button onclick="revealHint()" class="text-[11px] text-amber-500 hover:text-amber-400 flex items-center gap-1 font-bold focus:outline-none">
+            💡 Need a contextual hint? Click to slide out...
+          </button>
+          <p id="modal-hint" class="hidden mt-1.5 text-[11px] text-slate-400 italic bg-slate-950 p-3 rounded-lg border border-slate-800"></p>
+        </div>
+      </div>
+
+      <!-- Rationale Box -->
+      <div id="modal-explanation" class="hidden bg-slate-950 p-4 rounded-xl border-l-4 border-amber-400 space-y-2">
+        <h4 id="explanation-status" class="font-extrabold text-xs uppercase tracking-wider">Result</h4>
+        <p id="explanation-text" class="text-xs text-slate-300 leading-relaxed"></p>
+      </div>
+
+      <!-- Modal Footer actions -->
+      <div class="flex justify-between items-center pt-2 border-t border-slate-800/60">
+        <div class="text-[11px] text-slate-400">
+          Answering Squad: <span id="answering-team-label" class="text-amber-400 font-bold">Team Alpha</span>
+        </div>
+        <div class="flex gap-2">
+          <button id="modal-cancel-btn" onclick="cancelQuestion()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-4 py-2 rounded-xl font-bold text-xs transition">
+            ← CANCEL / BACK
+          </button>
+          <button id="modal-action-btn" onclick="submitAnswer()" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 px-5 py-2 rounded-xl font-bold transition-all text-xs">
+            SUBMIT VERDICT
+          </button>
+          <button id="modal-close-btn" onclick="closeModal()" class="hidden bg-amber-500 hover:bg-amber-400 text-slate-950 px-5 py-2 rounded-xl font-bold text-xs transition">
+            CONTINUE CAMPAIGN
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="category-celebration-modal" class="hidden fixed inset-0 bg-slate-950/90 flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full p-6 text-center shadow-2xl relative overflow-hidden space-y-4">
+      <canvas id="category-confetti" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
+      <div class="relative z-10 space-y-4">
+        <div class="text-5xl animate-bounce">🏆</div>
+        <h3 class="text-2xl font-extrabold text-emerald-400 heading-font uppercase tracking-wide" id="completed-category-title">Category Conquered!</h3>
+        <p class="text-sm text-slate-300">You have successfully mastered all 15 stages in this historical era!</p>
+        <button onclick="closeCategoryCelebration()" class="px-6 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition">
+          ADVANCE TO REMAINING CAMPAIGNS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="game-victory-modal" class="hidden fixed inset-0 bg-slate-950/98 flex items-center justify-center p-4 z-50 no-print">
+    <div class="bg-slate-900 border-4 border-amber-400 rounded-3xl max-w-2xl w-full p-8 text-center shadow-2xl relative overflow-hidden space-y-6">
+      <canvas id="victory-confetti" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
+      <div class="relative z-10 space-y-6">
+        <div class="text-7xl animate-pulse">👑</div>
+        <h2 class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 heading-font uppercase tracking-wider">Campaign Completed!</h2>
+        <div class="p-6 bg-amber-400/10 rounded-2xl border border-amber-400/30 shadow-lg inline-block">
+          <p class="text-2xl md:text-3xl font-extrabold text-amber-300 heading-font tracking-wide">
+            "Mr. Cunningham is proud of you!"
+          </p>
+        </div>
+        <p class="text-sm md:text-base text-slate-300 max-w-md mx-auto">
+          You have successfully completed all 90 levels in Global History. Your squad is officially ready to conquer the Regents!
+        </p>
+        <div class="flex justify-center gap-3">
+          <button onclick="window.print()" class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl text-xs transition uppercase tracking-wider">
+            🖨️ Print Final Performance Sheet
+          </button>
+          <button onclick="resetGame()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold rounded-xl text-xs transition uppercase tracking-wider">
+            ⚔️ Restart Quest
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <footer class="bg-slate-900 border-t border-slate-800 p-4 text-center text-[10px] text-slate-500 mt-8 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2 font-semibold">
+      <p>© NYS Regents Prep Campaign Guild. Based on Global History classroom documents.</p>
+      <p class="text-amber-400/40">Optimized for Google Sites Embeds & Smartboard Play.</p>
+    </div>
+  </footer>
+
+  <!-- Web Audio API SFX Synth -->
+  <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
         
-        <button id="btn-next" class="hidden" style="width:100%; margin-top:15px; text-align:center; background-color:var(--correct-color); font-weight:bold;" onclick="nextQuestion()">Advance to Next Document ➡️</button>
-    </div>
-
-    <!-- ROOM SUCCESS SCREEN -->
-    <div id="victory-screen" class="hidden" style="text-align: center;">
-        <h1 style="color: var(--correct-color);">🏆 Proficiency Achieved! 🏆</h1>
-        <p>Excellent data analysis. You successfully met NYS Social Studies standard tracking specifications for this era.</p>
-        <button class="room-btn" style="width: 100%; text-align: center; margin-top: 20px;" onclick="returnToHub()">Return to Temporal Hub</button>
-    </div>
-</div>
-
-<script>
-    // Authentic Regents Exam Database
-    const gameData = {
-        industrial: {
-            title: "⚙️ Room 2: The Industrial Revolution",
-            questions: [
-                {
-                    stimulus: "... This agrarian revolution, as it has been called, was every bit as important as the industrial revolution. The availability of good food, combined with improved infant survival and the disappearance of epidemics, helped more young live to adulthood and allowed adults to live longer. This meant that, by the middle of the eighteenth century, more people were having more children, and the population grew quickly thereafter.",
-                    source: "Source: James A. Corrick, The Industrial Revolution, Lucent Books, 1998 (NYS Global History Regents)",
-                    question: "Which situation was a result of the events described in this passage?",
-                    choices: [
-                        { text: "(1) migration of people to rural areas", correct: false },
-                        { text: "(2) population increase", correct: true },
-                        { text: "(3) development of Marxist ideals", correct: false },
-                        { text: "(4) widespread famine in Ireland", correct: false }
-                    ],
-                    hint: "Look closely at the final sentence. What demographic trend does the text explicitly note as a result of the availability of good food?",
-                    fiftyWrong: [0, 2]
-                },
-                {
-                    stimulus: "Sadler: When did you first begin to work in mills?\nCooper: When I was ten years of age.\nSadler: What were your usual hours of working?\nCooper: We began at five in the morning and stopped at nine in the night.\nSadler: What time did you have for meals?\nCooper: We had just one period of forty minutes in the sixteen hours. That was at noon.\nSadler: What means were taken to keep you awake and attentive?\nCooper: At times we were frequently strapped [beaten].",
-                    source: "Source: Testimonies Before the Sadler Committee, British Parliamentary Records, 1832 (NYS Global History Regents)",
-                    question: "A historian could best use this document to study which aspect of the Industrial Revolution?",
-                    choices: [
-                        { text: "(1) benefits of the domestic cottage industry system", correct: false },
-                        { text: "(2) technological innovations in electrical infrastructure", correct: false },
-                        { text: "(3) social impacts of factory working conditions on children", correct: true },
-                        { text: "(4) strategies used by workers to legally form early trade unions", correct: false }
-                    ],
-                    hint: "Consider the age of the witness (Cooper) and the grueling nature of the sixteen-hour workday rules being investigated.",
-                    fiftyWrong: [0, 1]
-                }
-            ]
-        },
-        imperialism: {
-            title: "🌍 Room 3: Global Imperialism",
-            questions: [
-                {
-                    stimulus: "The Partition of Africa began in earnest with the Berlin Conference of 1884-1885... The purpose of the conference was to establish the rules for the exploitation of the continent. European powers met to carve up Africa into colonies. Africans were not invited or made privy to their decisions. The resulting borders divided ethnic groups and forced rival tribes to live together under European colonial rule.",
-                    source: "Source: Based on NYS Global History and Geography Regents Examination Documents",
-                    question: "What was a major result of the event described in this passage?",
-                    choices: [
-                        { text: "(1) African nations formed a united military front against imperialism", correct: false },
-                        { text: "(2) European powers divided Africa into colonies without regard for ethnic boundaries", correct: true },
-                        { text: "(3) The Atlantic slave trade was officially re-established", correct: false },
-                        { text: "(4) Great Britain lost all of its colonial territories in Africa", correct: false }
-                    ],
-                    hint: "The text states that 'Africans were not invited' and mentions 'carving up' the continent. Which choice best matches this lack of African representation?",
-                    fiftyWrong: [0, 2]
-                },
-                {
-                    stimulus: "... The immediate cause of the Sepoy Mutiny was the introduction of the new Enfield rifle. A rumor spread among the sepoys that the grease used to lubricate the cartridges was a mixture of pigs' and cows' lard; thus, to have oral contact with it was an insult to both Muslims and Hindus. The British quickly realized their mistake and offered to replace the cartridges, but the damage was already done.",
-                    source: "Source: NYS Global History Regents Examination, August 2019",
-                    question: "This passage describes an event that was primarily caused by which factor?",
-                    choices: [
-                        { text: "(1) British insensitivity to Indian religious practices", correct: true },
-                        { text: "(2) Indian desire to spread Hinduism and Islam to Europe", correct: false },
-                        { text: "(3) British refusal to employ Indian soldiers in the military", correct: false },
-                        { text: "(4) The lack of technological advancement in the British military", correct: false }
-                    ],
-                    hint: "Pigs are forbidden in Islam, and cows are sacred in Hinduism. Forcing soldiers to bite cartridges greased with these fats showed a lack of respect for what?",
-                    fiftyWrong: [2, 3]
-                }
-            ]
+        if (type === 'correct') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); // C5
+          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.08); // E5
+          osc.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.16); // G5
+          osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.24); // C6
+          gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.45);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.45);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(130, audioCtx.currentTime);
+          osc.frequency.linearRampToValueAtTime(70, audioCtx.currentTime + 0.35);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.4);
+        } else if (type === 'unlock') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.35);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.35);
+        } else if (type === 'victory') {
+          const scale = [523.25, 587.33, 659.25, 698.46, 783.99, 880.00, 987.77, 1046.50];
+          scale.forEach((freq, idx) => {
+            const notesOsc = audioCtx.createOscillator();
+            const notesGain = audioCtx.createGain();
+            notesOsc.connect(notesGain);
+            notesGain.connect(audioCtx.destination);
+            notesOsc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
+            notesGain.gain.setValueAtTime(0.05, audioCtx.currentTime + idx * 0.1);
+            notesGain.gain.exponentialRampToValueAtTime(0.005, audioCtx.currentTime + idx * 0.1 + 0.3);
+            notesOsc.start(audioCtx.currentTime + idx * 0.1);
+            notesOsc.stop(audioCtx.currentTime + idx * 0.1 + 0.3);
+          });
         }
+      } catch (e) {
+        console.debug('Audio context not loaded yet.');
+      }
+    }
+  </script>
+
+  <script>
+    const CAMPAIGN_DATA = [
+      {
+        category: "Revolutions & Ideas",
+        shortName: "Revolutions",
+        levels: [
+          {
+            levelNum: 1,
+            title: "Tokugawa Unification",
+            passage: "From: Tokugawa Ieyasu's Shogunate Era Document, Sengoku Unification Overview\n\nThe Edo period followed many years of political and social upheaval. The previous division of Japanese history known as the Sengoku period (warring states period) was dominated by wars fought between various political and religious factions for the control of the country. These wars came to an end with the unification of Japan by the great generals Oda Nobunaga and Toyotomi Hideyoshi and eventually Tokugawa Ieyasu who formed Japan’s final Shogunate. Ieyasu consolidated his power through a series of social changes including the introduction of a strict class system and the tight control of the ruling daimyo families from the capital city Edo. Individuals had no legal rights and the family became very important at all social levels.…",
+            question: "Based on this passage, what was one way the Tokugawa shogunate affected Japanese society?",
+            options: [
+              { text: "They unified Japan.", isCorrect: true },
+              { text: "They promoted trade.", isCorrect: false },
+              { text: "They modernized industry.", isCorrect: false },
+              { text: "They eliminated social classes.", isCorrect: false }
+            ],
+            hint: "Look at who brought the warring states period (Sengoku) to an end.",
+            explanation: "The text directly states that the division of Japanese history ended with the unification of Japan by great generals and Tokugawa Ieyasu.",
+            visual: null
+          },
+          {
+            levelNum: 2,
+            title: "Edo Political Philosophy",
+            passage: "From: Tokugawa Ieyasu's Shogunate Era Document, Sengoku Unification Overview\n\nThe Edo period followed many years of political and social upheaval. The previous division of Japanese history known as the Sengoku period (warring states period) was dominated by wars fought between various political and religious factions for the control of the country. These wars came to an end with the unification of Japan by the great generals Oda Nobunaga and Toyotomi Hideyoshi and eventually Tokugawa Ieyasu who formed Japan’s final Shogunate. Ieyasu consolidated his power through a series of social changes including the introduction of a strict class system and the tight control of the ruling daimyo families from the capital city Edo. Individuals had no legal rights and the family became very important at all social levels.…",
+            question: "Based on this passage, which political idea evolved during the Tokugawa shogunate?",
+            options: [
+              { text: "absolutism", isCorrect: true },
+              { text: "democracy", isCorrect: false },
+              { text: "socialism", isCorrect: false },
+              { text: "oligarchy", isCorrect: false }
+            ],
+            hint: "Consider the shogunate's absolute control over daimyo and the lack of individual legal rights.",
+            explanation: "Centralized control, strict social codes, and individuals having zero legal rights are defining indicators of absolutism.",
+            visual: null
+          },
+          {
+            levelNum: 3,
+            title: "Montesquieu and State Structure",
+            passage: "From: Baron de Montesquieu, The Spirit of the Laws, 1748\n\n. . .In every government there are three sorts of power: the legislative; the executive in respect to things dependent on the law of nations; and the executive in regard to matters that depend on the civil law. . . .",
+            question: "Which concept is being described in this quotation?",
+            options: [
+              { text: "Separation of powers", isCorrect: true },
+              { text: "Consent of the governed", isCorrect: false },
+              { text: "Natural Laws", isCorrect: false },
+              { text: "Social contract", isCorrect: false }
+            ],
+            hint: "The author outlines three distinct types of power within government.",
+            explanation: "Montesquieu's identification of three distinct types of power (legislative, executive, and judicial) forms the structural basis of the Separation of Powers.",
+            visual: null
+          },
+          {
+            levelNum: 4,
+            title: "Locke on Nature & Government",
+            passage: "From: John Locke, Two Treatises of Government, 1690\n\n“If man in the state of nature is free, if he is absolute lord of his own person and possessions, why will he give up his freedom? Why will he put himself under the control of any person or institution? The obvious answer is that rights in the state of nature are constantly exposed to the attack of others. Since every man is equal and since most men do not concern themselves with equity and justice, the enjoyment of rights in the state of nature is unsafe and insecure. Hence each man joins in society with others to preserve his life, liberty, and property.”",
+            question: "Which statement best describes the author's point of view?",
+            options: [
+              { text: "Governments gain legitimacy by protecting the natural rights of citizens.", isCorrect: true },
+              { text: "Political stability is best maintained through absolute monarchy.", isCorrect: false },
+              { text: "Economic equality should be prioritized over individual liberty.", isCorrect: false },
+              { text: "Governments should possess broad powers to regulate society.", isCorrect: false }
+            ],
+            hint: "Observe why individuals voluntarily enter society to form a government.",
+            explanation: "John Locke asserts that individuals form societies and governments specifically to protect their natural rights of life, liberty, and property.",
+            visual: null
+          },
+          {
+            levelNum: 5,
+            title: "John Locke's Legacy",
+            passage: "From: John Locke, Two Treatises of Government, 1690\n\n“If man in the state of nature is free, if he is absolute lord of his own person and possessions, why will he give up his freedom? Why will he put himself under the control of any person or institution? The obvious answer is that rights in the state of nature are constantly exposed to the attack of others. Since every man is equal and since most men do not concern themselves with equity and justice, the enjoyment of rights in the state of nature is unsafe and insecure. Hence each man joins in society with others to preserve his life, liberty, and property.”",
+            question: "Which of these events was most heavily influenced by the ideas in this passage?",
+            options: [
+              { text: "Latin American Revolutions", isCorrect: true },
+              { text: "Industrial Revolution", isCorrect: false },
+              { text: "Napoleon's conquest of Rome", isCorrect: false },
+              { text: "Russian Revolution", isCorrect: false }
+            ],
+            hint: "Which revolution sought to throw off European colonial control using natural rights arguments?",
+            explanation: "Locke's theories of natural rights and self-government directly inspired Latin American leaders to seek independence from European empires.",
+            visual: null
+          },
+          {
+            levelNum: 6,
+            title: "Influence on the Rights of Man",
+            passage: "From: National Assembly of France, Declaration of the Rights of Man and the Citizen, 1789\n\n1. Men are born and remain free and equal in rights. Social distinctions may be founded only upon the general good.\n\n2. The aim of all political association is the preservation of the natural and imprescriptible [inalienable] rights of man. These rights are liberty, property, security, and resistance to oppression. . . .\n\n4. Liberty consists in the freedom to do everything which injures no one else; hence the exercise of the natural rights of each man has no limits except those which assure to the other members of the society the enjoyment of the same rights. These limits can only be determined by law. . . .",
+            question: "Which of the following individuals most strongly influenced the ideas in the excerpt of the Declaration above?",
+            options: [
+              { text: "John Locke", isCorrect: true },
+              { text: "Louis XIV", isCorrect: false },
+              { text: "Montesquieu", isCorrect: false },
+              { text: "Thomas Hobbes", isCorrect: false }
+            ],
+            hint: "The document's heavy focus on the absolute preservation of natural, inalienable rights echoes a specific English thinker.",
+            explanation: "The emphasis on natural rights to liberty, property, and security is directly inherited from John Locke's political treaties.",
+            visual: null
+          },
+          {
+            levelNum: 7,
+            title: "Point of View: French Assembly",
+            passage: "From: National Assembly of France, Declaration of the Rights of Man and the Citizen, 1789\n\n1. Men are born and remain free and equal in rights. Social distinctions may be founded only upon the general good.\n\n2. The aim of all political association is the preservation of the natural and imprescriptible [inalienable] rights of man. These rights are liberty, property, security, and resistance to oppression. . . .\n\n4. Liberty consists in the freedom to do everything which injures no one else; hence the exercise of the natural rights of each man has no limits except those which assure to the other members of the society the enjoyment of the same rights. These limits can only be determined by law. . . .",
+            question: "Which of the following states the point of view of the authors of the Declaration of the Rights of Man and the Citizen?",
+            options: [
+              { text: "A government should make laws to protect the natural rights of its citizens.", isCorrect: true },
+              { text: "Absolute monarchy is a form of government that guarantees the rights of citizens.", isCorrect: false },
+              { text: "Property is a more valuable natural right than security.", isCorrect: false },
+              { text: "A government should oppress its people to ensure that they are safe.", isCorrect: false }
+            ],
+            hint: "Review Section 2, which identifies the true aim of all political association.",
+            explanation: "The authors declare that the fundamental purpose of any government is to protect the inalienable rights of its citizens.",
+            visual: null
+          },
+          {
+            levelNum: 8,
+            title: "Simón Bolívar's Goal",
+            passage: "From: Simón Bolívar, Reply of a South American to a Gentleman of This Island [Jamaica], September 6, 1815\n\n. . . . I shall tell you with what we must provide ourselves in order to expel the Spaniards and to found a free government. It is union, obviously; but such union will come about through sensible planning and well-directed actions rather than by divine magic. America stands together because it is abandoned by all other nations. It is isolated in the center of the world. It has no diplomatic relations, nor does it receive any military assistance; instead, America is attacked by Spain, which has more military supplies than any we can possibly acquire through furtive [stealthy] means... we will achieve accord [unity] in cultivating the virtues and talents that lead to glory. Then will we march majestically toward that great prosperity for which South America is destined. Then will those sciences and arts which, born in the East, have enlightened Europe, wing their way to a free Colombia, which will cordially bid them welcome. . .",
+            question: "In this letter, Simón Bolívar’s goal is to:",
+            options: [
+              { text: "form one nation that unifies all of South America", isCorrect: true },
+              { text: "become monarch of the strongest country in South America", isCorrect: false },
+              { text: "break off diplomatic relations with Europe", isCorrect: false },
+              { text: "convince Mexico to join in his fight against Spain", isCorrect: false }
+            ],
+            hint: "He repeatedly places emphasis on achieving 'union' and continental 'accord'.",
+            explanation: "Bolívar's political dream was to unite the liberated regions of South America into a single powerful republic, Gran Colombia.",
+            visual: null
+          },
+          {
+            levelNum: 9,
+            title: "Enlightenment Influence on Bolívar",
+            passage: "From: Simón Bolívar, Reply of a South American to a Gentleman of This Island [Jamaica], September 6, 1815\n\n. . . . I shall tell you with what we must provide ourselves in order to expel the Spaniards and to found a free government. It is union, obviously; but such union will come about through sensible planning and well-directed actions rather than by divine magic. America stands together because it is abandoned by all other nations. It is isolated in the center of the world. It has no diplomatic relations, nor does it receive any military assistance; instead, America is attacked by Spain, which has more military supplies than any we can possibly acquire through furtive [stealthy] means... we will achieve accord [unity] in cultivating the virtues and talents that lead to glory. Then will we march majestically toward that great prosperity for which South America is destined. Then will those sciences and arts which, born in the East, have enlightened Europe, wing their way to a free Colombia, which will cordially bid them welcome. . .",
+            question: "Simón Bolívar’s actions were most likely influenced by the ideas of:",
+            options: [
+              { text: "Enlightenment thinkers", isCorrect: true },
+              { text: "church officials", isCorrect: false },
+              { text: "laissez-faire economists", isCorrect: false },
+              { text: "Marxist followers", isCorrect: false }
+            ],
+            hint: "He speaks of 'free government', 'liberty', and the sciences/arts that 'enlightened Europe.'",
+            explanation: "Bolívar's philosophies on self-government, human dignity, and liberation from absolute monarchies were directly shaped by European Enlightenment ideals.",
+            visual: null
+          },
+          {
+            levelNum: 10,
+            title: "French Estates Inequality",
+            passage: "From: Historical Records on the Pre-Revolutionary French Three-Estates system, 1789\n\nContemporary pre-revolutionary accounts depict the severe social inequalities in France, where the rural peasants (Third Estate), bent in rags and labor, supported the heavy tax burden that financed the luxurious lifestyles of both the nobility (Second Estate) and the high clergy (First Estate). This structural inequality led to widespread protests, rising bread prices, and the ultimate storming of the Bastille.",
+            question: "These historical conditions contributed primarily to the beginning of the:",
+            options: [
+              { text: "French Revolution", isCorrect: true },
+              { text: "Protestant Reformation", isCorrect: false },
+              { text: "Napoleonic Wars", isCorrect: false },
+              { text: "European Renaissance", isCorrect: false }
+            ],
+            hint: "Which revolution was caused by the severe inequalities between the three rigid estates in pre-1789 France?",
+            explanation: "The systemic taxation and lack of representation for the French Third Estate peasants triggered the French Revolution in 1789.",
+            visual: null
+          },
+          {
+            levelNum: 11,
+            title: "Tax Burden of the Estates",
+            passage: "From: Historical Records on the Pre-Revolutionary French Three-Estates system, 1789\n\nContemporary pre-revolutionary accounts depict the severe social inequalities in France, where the rural peasants (Third Estate), bent in rags and labor, supported the heavy tax burden that financed the luxurious lifestyles of both the nobility (Second Estate) and the high clergy (First Estate). This structural inequality led to widespread protests, rising bread prices, and the ultimate storming of the Bastille.",
+            question: "What was a main point of criticism regarding the three-estates system?",
+            options: [
+              { text: "One group paid heavy taxes that supported the other two groups.", isCorrect: true },
+              { text: "Hard work, prayer, and a good example allowed for a stable government in France.", isCorrect: false },
+              { text: "Peasants and professionals in this society were gaining political and economic power.", isCorrect: false },
+              { text: "French society emphasized the importance of natural law and social equality.", isCorrect: false }
+            ],
+            hint: "Identify which group was carrying the entire fiscal weight of the state.",
+            explanation: "The first two estates (Clergy and Nobility) enjoyed tax exemptions while the Third Estate bore almost the entire national tax load.",
+            visual: null
+          },
+          {
+            levelNum: 12,
+            title: "Haitian Revolution Origins",
+            passage: "From: French Historical Archives, Revolt on the Island of Saint-Domingue (present-day Haiti), 1791\n\n. . . The seeds of independence were first sown among free black soldiers sent by the white French governors to fight against the British in the American War of Independence, where they were exposed to anti-colonial ideas. Later, the French Revolution’s notions of liberty, equality, and brotherhood inspired an independence movement among the minority white settlers and a highly fragmented socioeconomic mix of free blacks. When the white population defied an order from France to enfranchise [give rights to] free blacks, it triggered a violent revolt that involved changing alliances among free blacks and the large slave population. After promulgating [announcing] a constitution in 1801 and overcoming a military force sent by Napoleon, Haiti successfully declared its independence. Its success, along with that of the American War of Independence, inspired a number of anticolonial struggles throughout Latin America. . . .",
+            question: "According to the document, one impact the Haitian revolt had on global history was the encouragement of:",
+            options: [
+              { text: "other Latin American independence movements", isCorrect: true },
+              { text: "the French Revolution", isCorrect: false },
+              { text: "the American Revolution", isCorrect: false },
+              { text: "increased colonization of Latin America", isCorrect: false }
+            ],
+            hint: "Observe the final sentence detailing the global footprint of Haiti's success.",
+            explanation: "The text directly states that Haiti's successful declaration of independence served as a direct inspiration for anti-colonial struggles across South America.",
+            visual: null
+          },
+          {
+            levelNum: 13,
+            title: "Haitian Revolutionary Inspiration",
+            passage: "From: French Historical Archives, Revolt on the Island of Saint-Domingue (present-day Haiti), 1791\n\n. . . The seeds of independence were first sown among free black soldiers sent by the white French governors to fight against the British in the American War of Independence, where they were exposed to anti-colonial ideas. Later, the French Revolution’s notions of liberty, equality, and brotherhood inspired an independence movement among the minority white settlers and a highly fragmented socioeconomic mix of free blacks...",
+            question: "Based on this passage, which European event directly inspired elements of the Haitian independence movement?",
+            options: [
+              { text: "The French Revolution", isCorrect: true },
+              { text: "The Glorious Revolution", isCorrect: false },
+              { text: "The Industrial Revolution", isCorrect: false },
+              { text: "The German Unification movement", isCorrect: false }
+            ],
+            hint: "Review the second sentence, which highlights the French ideas of liberty, equality, and brotherhood.",
+            explanation: "The passage notes that the French Revolution's core concepts of liberty, equality, and fraternity directly influenced different socioeconomic layers in Saint-Domingue.",
+            visual: null
+          },
+          {
+            levelNum: 14,
+            title: "Boundaries of South America",
+            passage: "From: Geopolitical Maps of South American Boundary Shifts (1790 vs. 1828)\n\nComparing South American boundaries:\nMap A: South America in 1790 (showing large Spanish Viceroyalties of New Granada, Peru, and Rio de la Plata, and Portuguese Brazil).\nMap B: South America in 1828 (showing independent countries: Bolivia, Peru, Chile, Brazil, United Provinces of Rio de la Plata, Gran Colombia).",
+            question: "Based on a comparison of these maps of South America, which conclusion is accurate?",
+            options: [
+              { text: "Many regions of South America gained their independence between 1790 and 1828.", isCorrect: true },
+              { text: "All of South America was independent by 1828.", isCorrect: false },
+              { text: "Spain continued to gain South American colonies in the 19th century.", isCorrect: false },
+              { text: "Between 1790 and 1828, South American political boundaries remained unchanged except for Brazil.", isCorrect: false }
+            ],
+            hint: "Look at the disappearance of Spanish Viceroyalties and the sudden emergence of individual republics by 1828.",
+            explanation: "The boundary maps display the rapid collapse of Spanish and Portuguese colonial holdings in favor of newly formed independent nations.",
+            visual: null
+          },
+          {
+            levelNum: 15,
+            title: "Use of Boundary Maps",
+            passage: "From: Geopolitical Maps of South American Boundary Shifts (1790 vs. 1828)\n\nComparing South American boundaries:\nMap A: South America in 1790 (showing large Spanish Viceroyalties of New Granada, Peru, and Rio de la Plata, and Portuguese Brazil).\nMap B: South America in 1828 (showing independent countries: Bolivia, Peru, Chile, Brazil, United Provinces of Rio de la Plata, Gran Colombia).",
+            question: "A historian could best use these maps to study which of the following?",
+            options: [
+              { text: "the results of nationalism in Latin America", isCorrect: true },
+              { text: "the impact of roads in the Andes Mountains", isCorrect: false },
+              { text: "the effects of globalization", isCorrect: false },
+              { text: "the causes of the French Revolution", isCorrect: false }
+            ],
+            hint: "Nationalism is the desire of a group of people to govern themselves. How is this reflected on Map B?",
+            explanation: "The redrawn boundaries show the dramatic geopolitical results of nationalistic independent wars against European colonizers.",
+            visual: null
+          }
+        ]
+      },
+      {
+        category: "Industrial & Economic Shifts",
+        shortName: "Industrialization",
+        levels: [
+          {
+            levelNum: 1,
+            title: "Laissez-Faire Defined",
+            passage: "From: Adam Smith, The Wealth of Nations (Martin Perry repub. introduction, 2013)\n\nThe Wealth of Nations carries the important message of laissez faire, which means that the government should intervene as little as possible in economic affairs and leave the market to its own devices. It advocates the liberation of economic production from all limiting regulation in order to benefit the people . . .",
+            question: "According to Martin Perry, what role did Adam Smith believe the government should play in the economy?",
+            options: [
+              { text: "The government should make very few laws that affect businesses.", isCorrect: true },
+              { text: "The government should regulate businesses to make sure they use safe practices.", isCorrect: false },
+              { text: "The government should restrict which businesses are allowed to open.", isCorrect: false },
+              { text: "The government should play a role in helping businesses make as much money as possible.", isCorrect: false }
+            ],
+            hint: "Laissez-faire translates to 'let do'. Look at the first sentence.",
+            explanation: "Smith's laissez-faire calls for a completely free market where the government minimizes regulations and laws impacting industrial production.",
+            visual: null
+          },
+          {
+            levelNum: 2,
+            title: "Laissez-Faire Effects",
+            passage: "From: Adam Smith, The Wealth of Nations (Martin Perry repub. introduction, 2013)\n\nThe Wealth of Nations carries the important message of laissez faire, which means that the government should intervene as little as possible in economic affairs and leave the market to its own devices. It advocates the liberation of economic production from all limiting regulation in order to benefit the people . . .",
+            question: "Which of the following effects did Adam Smith’s ideas have in England in the 18th and 19th centuries?",
+            options: [
+              { text: "Industrial leaders gained in wealth and power.", isCorrect: true },
+              { text: "Workers unionized for better pay.", isCorrect: false },
+              { text: "Governments passed laws to prevent child labor.", isCorrect: false },
+              { text: "Theorists predicted that the population would outgrow the nation’s food supply.", isCorrect: false }
+            ],
+            hint: "Without government rules, who retains full control of operations and profits?",
+            explanation: "Operating under laissez-faire policies, early industrial entrepreneurs and factory owners accumulated massive fortunes with zero regulatory boundaries.",
+            visual: null
+          },
+          {
+            levelNum: 3,
+            title: "Ure and the Steam Engine",
+            passage: "From: Andrew Ure, The Philosophy of Manufactures, 1835\n\n. . . Steam-engines furnish the means not only of their support but of their multiplication. They create a vast demand for fuel; and, while they lend their powerful arms to drain the pits and to raise the coals, they call into employment multitudes of miners, engineers, ship-builders, and sailors, and cause the construction of canals and railways: and, while they enable these rich fields of industry to be cultivated to the utmost, they leave thousands of fine arable fields free for the production of food to man, which must have been otherwise allotted to the food of horses. Steam-engines moreover, by the cheapness and steadiness of their action, fabricate [produce] cheap goods, and procure [acquire] in their exchange a liberal supply of the necessaries and comforts of life, produced in foreign lands. . . .",
+            question: "Based on the passage, what was one effect of the use of steam engines in the 19th century?",
+            options: [
+              { text: "Greater employment", isCorrect: true },
+              { text: "Slowed industrial growth", isCorrect: false },
+              { text: "An increase in the price of goods", isCorrect: false },
+              { text: "Food scarcity", isCorrect: false }
+            ],
+            hint: "Ure lists miners, engineers, shipbuilders, and canal diggers as being called into action.",
+            explanation: "The expansion of the steam engine created large support networks, boosting jobs across mining, logistics, and engineering.",
+            visual: null
+          },
+          {
+            levelNum: 4,
+            title: "Andrew Ure's POV",
+            passage: "From: Andrew Ure, The Philosophy of Manufactures, 1835\n\n. . . Steam-engines furnish the means not only of their support but of their multiplication. They create a vast demand for fuel; and, while they lend their powerful arms to drain the pits and to raise the coals, they call into employment multitudes of miners, engineers, ship-builders, and sailors, and cause the construction of canals and railways: and, while they enable these rich fields of industry to be cultivated to the utmost, they leave thousands of fine arable fields free for the production of food to man, which must have been otherwise allotted to the food of horses. Steam-engines moreover, by the cheapness and steadiness of their action, fabricate [produce] cheap goods, and procure [acquire] in their exchange a liberal supply of the necessaries and comforts of life, produced in foreign lands. . . .",
+            question: "Based on the passage, which of the following best describes the author’s point of view regarding steam engines?",
+            options: [
+              { text: "Steam engines benefit society because they lead to industrial growth and improvements in the quality of life.", isCorrect: true },
+              { text: "Steam engines do more harm than good because of pollution.", isCorrect: false },
+              { text: "Steam engines could lead to conflict with other countries.", isCorrect: false },
+              { text: "Steam engines lead to poorly made goods.", isCorrect: false }
+            ],
+            hint: "Does Ure look favorably upon the technology's ability to 'produce cheap goods' and supply 'comforts of life'?",
+            explanation: "Ure expresses a highly positive, pro-industry view, praising the steam engine for elevating output and providing cheap comforts.",
+            visual: null
+          },
+          {
+            levelNum: 5,
+            title: "Royston Pike: Child Labor",
+            passage: "From: E. Royston Pike, Hard Times, Human Documents of the Industrial Revolution, 1896\n\n“I don’t know how old I am. . . . I began to work when I was about 9. I first worked for a man who used to hit me with a belt. . . . I used to sleep in the pits that had no more coal in them; I used to eat whatever I could get; I ate for a long time the candles that I found in the pits. . . .”",
+            question: "What was one thing that happened in response to the conditions described in this passage?",
+            options: [
+              { text: "Marx wrote The Communist Manifesto", isCorrect: true },
+              { text: "Garibaldi organized the Red Shirts", isCorrect: false },
+              { text: "Charles Darwin developed The Origin of the Species", isCorrect: false },
+              { text: "Atatürk joined the Young Turks", isCorrect: false }
+            ],
+            hint: "The extreme conditions of unregulated early industrial labor led writers to draft radical new critiques of capitalism.",
+            explanation: "The horrific exploitation of workers in mines and mills served as the primary catalyst for Karl Marx's revolutionary critiques.",
+            visual: null
+          },
+          {
+            levelNum: 6,
+            title: "Child Labor: Historian Value",
+            passage: "From: E. Royston Pike, Hard Times, Human Documents of the Industrial Revolution, 1896\n\n“I don’t know how old I am. . . . I began to work when I was about 9. I first worked for a man who used to hit me with a belt. . . . I used to sleep in the pits that had no more coal in them; I used to eat whatever I could get; I ate for a long time the candles that I found in the pits. . . .”",
+            question: "Identify the best use of this document for a historian.",
+            options: [
+              { text: "To understand the conditions child laborers experienced", isCorrect: true },
+              { text: "To determine why mine owners employed children.", isCorrect: false },
+              { text: "To study the long term effects of working in mines on child labors", isCorrect: false },
+              { text: "To find out how much money mine owners saved by hiring children rather than adults", isCorrect: false }
+            ],
+            hint: "The narrator is a young first-person witness sharing details of their daily struggle.",
+            explanation: "This primary source document provides a raw, invaluable account of the actual daily conditions child miners had to endure.",
+            visual: null
+          },
+          {
+            levelNum: 7,
+            title: "The Machine Appendage",
+            passage: "From: Karl Marx and Friedrich Engels, The Communist Manifesto, 1848\n\n. . . Owing to the extensive use of machinery and to division of labor, the work of the proletarians has lost all individual character, and, consequently, all charm for the workman. He becomes an appendage [accessory] of the machine, and it is only the most simple, most monotonous, and most easily acquired knack [skill] that is required of him. Hence, the cost of production of a workman is restricted, almost entirely, to the means of subsistence that he requires for his maintenance, and for the propagation of his race...",
+            question: "Marx and Engels are reacting to changes resulting from:",
+            options: [
+              { text: "industrialization", isCorrect: true },
+              { text: "imperialism", isCorrect: false },
+              { text: "nationalism", isCorrect: false },
+              { text: "democratization", isCorrect: false }
+            ],
+            hint: "The passage criticizes division of labor, machinery work, and the reduction of workers to 'appendages of machines.'",
+            explanation: "The Communist Manifesto was written specifically in response to the social and economic disruptions of the Industrial Revolution.",
+            visual: null
+          },
+          {
+            levelNum: 8,
+            title: "Predicting Class Conflict",
+            passage: "From: Karl Marx and Friedrich Engels, The Communist Manifesto, 1848\n\n. . . Owing to the extensive use of machinery and to division of labor, the work of the proletarians has lost all individual character... in the same proportion the burden of toil also increases... Society splits into two great hostile camps directly facing each other: Bourgeoisie and Proletariat...",
+            question: "Which action did Marx and Engels predict would change the conditions described in this passage?",
+            options: [
+              { text: "revolts by the working class", isCorrect: true },
+              { text: "implementation of government reforms", isCorrect: false },
+              { text: "adoption of laissez-faire policies", isCorrect: false },
+              { text: "use of passive resistance", isCorrect: false }
+            ],
+            hint: "Marx believed that capitalism could not be gently patched, but would inevitably be overthrown by its workers.",
+            explanation: "Marx and Engels argued that the proletariat would violently rise up to seize control of the means of production from the bourgeois owners.",
+            visual: null
+          },
+          {
+            levelNum: 9,
+            title: "Ireland's Famine Spectacle",
+            passage: "From: Eyewitness Primary Account of the Great Hunger in Ireland, 1847\n\n… “I started from Cork, by the mail [coach] (says our informant), for Skibbereen and saw little until we came to Clonakilty, where the coach stopped for breakfast; and here, for the first time, the horrors of the poverty became visible, in the vast number of famished poor, who flocked around the coach to beg alms: amongst them was a woman carrying in her arms the corpse of a fine child, and making the most distressing appeal to the passengers for aid to enable her to purchase a coffin and bury her dear little baby. This horrible spectacle induced me to make some inquiry about her, when I learned from the people of the hotel that each day brings dozens of such applicants in the town….”",
+            question: "What is the most likely purpose of this document?",
+            options: [
+              { text: "to inspire social and political reform", isCorrect: true },
+              { text: "to highlight the benefits of free market", isCorrect: false },
+              { text: "to record the negative effects of child labor", isCorrect: false },
+              { text: "to minimize the impacts of agricultural innovations", isCorrect: false }
+            ],
+            hint: "Why would a writer document such a heartbreaking public spectacle for readers in Britain?",
+            explanation: "Eyewitness reports of the Irish Potato Famine were published to raise awareness and pressure the British government to act.",
+            visual: null
+          },
+          {
+            levelNum: 10,
+            title: "Emigration from Ireland",
+            passage: "From: Eyewitness Primary Account of the Great Hunger in Ireland, 1847\n\n… “I started from Cork, by the mail [coach] (says our informant), for Skibbereen and saw little until we came to Clonakilty, where the coach stopped for breakfast; and here, for the first time, the horrors of the poverty became visible, in the vast number of famished poor, who flocked around the coach to beg alms: amongst them was a woman carrying in her arms the corpse of a fine child, and making the most distressing appeal...”",
+            question: "The conditions described in this passage directly resulted in:",
+            options: [
+              { text: "millions of Irish emigrating to the United States", isCorrect: true },
+              { text: "Ireland invading Britain", isCorrect: false },
+              { text: "most landlords forgiving the rent the Irish owed", isCorrect: false },
+              { text: "Britain agreeing to withdraw from Ireland", isCorrect: false }
+            ],
+            hint: "Think about where the massive population of starving Irish went when potato blight destroyed their food supply.",
+            explanation: "The famine drove over a million Irish to flee their homeland, resulting in massive emigration trends to cities in North America.",
+            visual: null
+          },
+          {
+            levelNum: 11,
+            title: "Irish Famine Oats",
+            passage: "From: Irish National League Protest Document, British Trade Condemnation, 1848\n\n. . “That the people of Ireland, in their bitter hours of misfortune, have the strongest right to impeach [condemn] the criminality of the ministers of the crown, inasmuch as it has pleased a merciful Providence to favour Ireland in the present season with a most abundant crop of oats. Yet, whilst the Irish harbours are closed against the importation of foreign food, they are left open for the exportation of Irish grain, an exportation which has already amounted in the present season to a quantity nearly adequate to feed the entire people of Ireland, and to avert the now certain famine; thus inflicting upon the Irish people the abject [wretched] misery of having their own provisions carried away to feed others, whilst they themselves are left contemptuously [cruelly] to starve. . . .",
+            question: "The passage was written to justify:",
+            options: [
+              { text: "Irish protests against British trade policies", isCorrect: true },
+              { text: "the export of Irish grain", isCorrect: false },
+              { text: "the importation of foreign food through English ports", isCorrect: false },
+              { text: "the Great Famine", isCorrect: false }
+            ],
+            hint: "The text condemns ministers for leaving ports open for exportation while locals starve in misery.",
+            explanation: "The author is validating the outrage of the Irish public against the British government's trade policies that prioritised commerce over local survival.",
+            visual: null
+          },
+          {
+            levelNum: 12,
+            title: "Exporting Food Amid Famine",
+            passage: "From: Irish National League Protest Document, British Trade Condemnation, 1848\n\n. . “That the people of Ireland, in their bitter hours of misfortune, have the strongest right to impeach [condemn] the criminality of the ministers of the crown, inasmuch as it has pleased a merciful Providence to favour Ireland in the present season with a most abundant crop of oats. Yet, whilst the Irish harbours are closed against the importation of foreign food, they are left open for the exportation of Irish grain... whilst they themselves are left contemptuously [cruelly] to starve. . . .",
+            question: "Which problem is identified in this passage?",
+            options: [
+              { text: "the exporting of much-needed food", isCorrect: true },
+              { text: "the low prices of agricultural products", isCorrect: false },
+              { text: "the waste caused by grain overproduction", isCorrect: false },
+              { text: "the opening of ports to foreign merchants", isCorrect: false }
+            ],
+            hint: "What action is taking place at Irish harbors while the population is starving?",
+            explanation: "The text identifies the cruel paradox where commercial landlords exported Irish oats and grains to Britain while the domestic populace starved.",
+            visual: null
+          },
+          {
+            levelNum: 13,
+            title: "Victorian Labor Legislation",
+            passage: "From: Emma Griffin, Child Labour (British Library, May 14, 2014)\n\n…Further progress was made towards the end of Victoria’s reign. The Factory Act of 1878 prohibited work before the age of 10 and applied to all trades. It was bolstered [strengthened] by the Education Act of 1880, which introduced compulsory schooling up to the age of 10. Subsequent [later] amendments raised the school-leaving age to 12, with dispensations [exemptions] to leave before this age if pupils reached the required standards in reading, writing and arithmetic. By the end of Victoria’s reign, almost all children were in school up to the age of 12. This helped to ensure that a marked improvement in child welfare occurred between the beginning and end of Victoria’s reign.…",
+            question: "According to the document, what was a direct effect of the Factory Act of 1878 and Education Act of 1880?",
+            options: [
+              { text: "Almost all children were in school up to the age of 12 by the end of Victoria’s reign.", isCorrect: true },
+              { text: "The complete closure of all coal mines.", isCorrect: false },
+              { text: "An increase in the hours child laborers could work.", isCorrect: false },
+              { text: "A decline in basic reading and writing standards.", isCorrect: false }
+            ],
+            hint: "Look at the sentence starting with 'By the end of Victoria’s reign...'",
+            explanation: "The passage directly details that the acts successfully transitioned children out of factories and into compulsory schools.",
+            visual: null
+          },
+          {
+            levelNum: 14,
+            title: "Rise of Industrial Leaders",
+            passage: "From: Adam Smith, The Wealth of Nations (Martin Perry repub. introduction, 2013)\n\nAdam Smith argues that an individual pursuing his own self-interest is led by an 'invisible hand' to promote the public good. In early industrial England, this theory was eagerly used by factory owners to reject state regulations on factory conditions, hours, or wages.",
+            question: "Under the influence of Adam Smith's ideas, which group in England saw the greatest rise in political and economic power?",
+            options: [
+              { text: "Industrial leaders and factory owners", isCorrect: true },
+              { text: "Underaged mine workers", isCorrect: false },
+              { text: "Agricultural peasant tenants", isCorrect: false },
+              { text: "Trade union organizers", isCorrect: false }
+            ],
+            hint: "Laissez-faire policies naturally benefit the wealthy owners of capital by preventing state oversight.",
+            explanation: "Unregulated industrial settings allowed mill owners and manufacturers to consolidate incredible wealth and power without state checks.",
+            visual: null
+          },
+          {
+            levelNum: 15,
+            title: "Compulsory Education",
+            passage: "From: Emma Griffin, Child Labour (British Library, May 14, 2014)\n\n…Further progress was made towards the end of Victoria’s reign. The Factory Act of 1878 prohibited work before the age of 10 and applied to all trades. It was bolstered [strengthened] by the Education Act of 1880, which introduced compulsory schooling up to the age of 10. This helped to ensure that a marked improvement in child welfare occurred between the beginning and end of Victoria’s reign.…",
+            question: "A historian would find this document most useful for investigating:",
+            options: [
+              { text: "The transition from unregulated child labor to state-mandated education.", isCorrect: true },
+              { text: "The average daily profit of Victorian textile mills.", isCorrect: false },
+              { text: "The exact machinery safety specifications of coal mines.", isCorrect: false },
+              { text: "The origin of coal and raw materials imported to Great Britain.", isCorrect: false }
+            ],
+            hint: "Look at how the legal acts slowly shifted children away from mine works and into schools.",
+            explanation: "Griffin's historical piece traces the shift in societal values where state laws began replacing factory work with compulsory learning.",
+            visual: null
+          }
+        ]
+      },
+      {
+        category: "Age of Imperialism",
+        shortName: "Imperialism",
+        levels: [
+          {
+            levelNum: 1,
+            title: "French Colonial Motives",
+            passage: "From: Imperial Conquest: The Nation’s Savior, Parisian newspaper, 1883\n\n“The future & wealth of France depend above all on the extension & prosperity of our colonies. When factories produce more than consumers need [to buy], production must stop for a time, & workers must live off their savings…we lack markets for our products. Once the French genius is put to colonization we will find an outlet for our factory surplus, & at the same time we will be able to secure the primary materials needed in our factories.”",
+            question: "Which claim is best supported by this source?",
+            options: [
+              { text: "Industrial nations sought colonies partly for economic reasons.", isCorrect: true },
+              { text: "France hoped to end all factory production in its colonies.", isCorrect: false },
+              { text: "Colonization weakened France’s industrial economy.", isCorrect: false },
+              { text: "French workers opposed overseas expansion.", isCorrect: false }
+            ],
+            hint: "Look at the direct links made between factories having excess surplus and the need to acquire raw materials.",
+            explanation: "The newspaper article outlines the classical economic rationale for New Imperialism: colonies solve domestic overproduction and supply factories with materials.",
+            visual: null
+          },
+          {
+            levelNum: 2,
+            title: "Drivers of French Expansion",
+            passage: "From: Imperial Conquest: The Nation’s Savior, Parisian newspaper, 1883\n\n“The future & wealth of France depend above all on the extension & prosperity of our colonies. When factories produce more than consumers need [to buy], production must stop for a time, & workers must live off their savings…we lack markets for our products. Once the French genius is put to colonization we will find an outlet for our factory surplus, & at the same time we will be able to secure the primary materials needed in our factories.”",
+            question: "Which historical development most directly contributed to the situation described in this source?",
+            options: [
+              { text: "the growth of industrialization during the 19th century", isCorrect: true },
+              { text: "the spread of feudalism in Europe", isCorrect: false },
+              { text: "the rise of democracy after the Enlightenment", isCorrect: false },
+              { text: "the collapse of the Roman Catholic Church", isCorrect: false }
+            ],
+            hint: "What transformation allowed European factories to produce far more goods than domestic consumers could buy?",
+            explanation: "The Industrial Revolution led to massive manufacturing overproduction, forcing European powers to hunt for external markets and resources.",
+            visual: null
+          },
+          {
+            levelNum: 3,
+            title: "The Paternalist Mandate",
+            passage: "From: Rudyard Kipling, The White Man’s Burden, 1899\n\n“Take up the White Man’s burden—\n   Send forth the best ye breed—\nGo, bind your sons to exile\n   To serve your captives’ need;\nTo wait, in heavy harness,\n   On fluttered folk and wild—\nYour new-caught sullen peoples,\n   Half devil and half child. . . .”",
+            question: "This stanza from Kipling’s poem is most closely associated with the belief that it was the duty of Western colonial powers to:",
+            options: [
+              { text: "civilize the people they controlled", isCorrect: true },
+              { text: "learn from the people they conquered", isCorrect: false },
+              { text: "teach their colonies how to produce manufactured goods", isCorrect: false },
+              { text: "welcome less developed countries as equals", isCorrect: false }
+            ],
+            hint: "The poem describes indigenous groups as 'wild', 'sullen', and 'half devil and half child' requiring intervention.",
+            explanation: "Kipling's poem reflects the racial, patronizing concept of the 'civilizing mission'—asserting that Europeans had a moral obligation to civilize native peoples.",
+            visual: null
+          },
+          {
+            levelNum: 4,
+            title: "Implementing the 'Burden'",
+            passage: "From: Rudyard Kipling, The White Man’s Burden, 1899\n\n“Take up the White Man’s burden—\n   Send forth the best ye breed—\nGo, bind your sons to exile\n   To serve your captives’ need;\nTo wait, in heavy harness,\n   On fluttered folk and wild—\nYour new-caught sullen peoples,\n   Half devil and half child. . . .”",
+            question: "Based on this poem, which action would Kipling have most likely supported?",
+            options: [
+              { text: "The British established schools in India to teach Indian children English and British culture.", isCorrect: true },
+              { text: "The British shared equal power with Indians in the colonial government in 1899.", isCorrect: false },
+              { text: "The British used child labor in textile factories in India.", isCorrect: false },
+              { text: "The British established coal mines in India.", isCorrect: false }
+            ],
+            hint: "Which action seeks to 'civilize' and culturally assimilate the local population under Western models?",
+            explanation: "Kipling's view supported using educational systems to forcefully assimilate native populations into European cultures.",
+            visual: null
+          },
+          {
+            levelNum: 5,
+            title: "Leopold and Congo Rubber",
+            passage: "From: Michael Parker, Mission Crossroads, Spring 2017\n\n…Ivory and slaves had been the Congo’s main exports, but Leopold focused on rubber. The mass marketing of bicycles and automobiles in the 1890s greatly increased the demand for rubber and sent prices soaring. When a rubber producing vine was discovered in the rainforests of Congo in 1890, Leopold forced out the competition and acquired a monopoly on the scarce commodity. By one estimate, the Congo was producing 20,000 tons of crude rubber a year at a 900 percent profit. The high return was due largely to cheap labor.…",
+            question: "The information in this passage would be most useful to an economist researching:",
+            options: [
+              { text: "motivations for European imperialism in Africa", isCorrect: true },
+              { text: "employment strategies used in Europe", isCorrect: false },
+              { text: "reasons for European interest in ivory", isCorrect: false },
+              { text: "importation of European raw materials to Africa", isCorrect: false }
+            ],
+            hint: "Why did King Leopold establish a private monopoly over rubber harvesting in the Congo rainforest?",
+            explanation: "The text documents how raw material needs (driven by Western demand for rubber tires) directly motivated European colonial exploitation in Africa.",
+            visual: null
+          },
+          {
+            levelNum: 6,
+            title: "The Berlin Conference Summit",
+            passage: "From: Berlin Conference Diplomatic Records, Berlin Act of 1885\n\nTo prevent armed conflict among themselves during the rapid division of the African continent, fourteen European powers met at the Berlin Conference of 1884–1885. This summit formalized 'effective occupation' and redrew boundaries across Africa without input from any African leaders.",
+            question: "What was the primary political objective of the Berlin Conference?",
+            options: [
+              { text: "To partition Africa peacefully among competing European empires.", isCorrect: true },
+              { text: "To declare immediately the sovereignty of African kingdoms.", isCorrect: false },
+              { text: "To halt the global spread of mercantilist trade networks.", isCorrect: false },
+              { text: "To assist the United States in acquiring West African harbors.", isCorrect: false }
+            ],
+            hint: "Think about the need of European powers to carve up African land without triggering a massive war among themselves.",
+            explanation: "The Berlin Conference established legal procedures for European states to divide and claim African territories, completely bypassing the sovereignty of local populations.",
+            visual: null
+          },
+          {
+            levelNum: 7,
+            title: "Lin Zexu's Letter",
+            passage: "From: Lin Zexu, A Letter to Queen Victoria, 1839\n\n. . . . I have heard that you are a kind, compassionate monarch. I am sure that you will not do to others what you yourself do not desire. I have also heard that you have instructed every British ship that sails for Canton not to bring any prohibited goods to China. It seems that your policy is as enlightened as it is proper. The fact that British ships have continued to bring opium to China results perhaps from the impossibility of making a thorough inspection of all of them owing to their large numbers. I am sending you this letter to reiterate [repeat] the seriousness with which we enforce the law of the Celestial Empire and to make sure that merchants from your honorable country will not attempt to violate it again. . . .",
+            question: "The primary purpose of this letter was to persuade the British to:",
+            options: [
+              { text: "stop the flow of opium into China", isCorrect: true },
+              { text: "increase trade with China", isCorrect: false },
+              { text: "end all business with China", isCorrect: false },
+              { text: "defend China against invasion", isCorrect: false }
+            ],
+            hint: "Lin Zexu is appealing to the British Crown to halt the smuggling of a highly addictive substance.",
+            explanation: "Lin Zexu wrote this appeal to demand that Britain prevent its merchants from smuggling illegal opium, which was ravaging China.",
+            visual: null
+          },
+          {
+            levelNum: 8,
+            title: "Result of Opium Smuggling",
+            passage: "From: Lin Zexu, A Letter to Queen Victoria, 1839\n\n. . . . I have heard that you are a kind, compassionate monarch. I am sure that you will not do to others what you yourself do not desire. I have also heard that you have instructed every British ship that sails for Canton not to bring any prohibited goods to China...",
+            question: "What is a long-term result of the conflict described in this letter?",
+            options: [
+              { text: "The British forced China to sign unequal treaties.", isCorrect: true },
+              { text: "The British were forced to pay reparations to China.", isCorrect: false },
+              { text: "The Chinese government closed all ports to the British.", isCorrect: false },
+              { text: "The British agreed to respect Chinese sovereignty", isCorrect: false }
+            ],
+            hint: "Think of the Treaty of Nanjing, Hong Kong's cessation, and the division of China into spheres of influence.",
+            explanation: "Britain's military victory in the Opium Wars forced the defeated Qing dynasty to sign the Treaty of Nanjing and subsequent unequal treaties.",
+            visual: null
+          },
+          {
+            levelNum: 9,
+            title: "Chinua Achebe's Perspective",
+            passage: "From: Chinua Achebe, Things Fall Apart, Anchor Books\n\n“Does the white man understand our custom about land?” “How can he when he does not even speak our tongue? But he says that our customs are bad; and our own brothers who have taken up his religion also say that our customs are bad. How do you think we can fight when our own brothers have turned against us? The white man is very clever. He came quietly and peaceably with his religion. We were amused at his foolishness and allowed him to stay. Now he has won our brothers, and our clan can no longer act like one. He has put a knife on the things that held us together and we have fallen apart.”",
+            question: "Which event most influenced the situation being described in this passage?",
+            options: [
+              { text: "the Berlin Conference", isCorrect: true },
+              { text: "World War II", isCorrect: false },
+              { text: "the Congress of Vienna", isCorrect: false },
+              { text: "the Treaty of Versailles", isCorrect: false }
+            ],
+            hint: "The partitioning of Africa laid the groundwork for European administrators and missionaries to penetrate native clans.",
+            explanation: "The Berlin Conference of 1884 initiated the division of Africa, allowing European powers to introduce administrative and religious systems that fractured traditional societies.",
+            visual: null
+          },
+          {
+            levelNum: 10,
+            title: "Use of Achebe's Excerpt",
+            passage: "From: Chinua Achebe, Things Fall Apart, Anchor Books\n\n“Does the white man understand our custom about land?” “How can he when he does not even speak our tongue? But he says that our customs are bad; and our own brothers who have taken up his religion also say that our customs are bad... He has put a knife on the things that held us together and we have fallen apart.”",
+            question: "For which purpose could this passage best be used?",
+            options: [
+              { text: "to show the perspective of indigenous people during the time period", isCorrect: true },
+              { text: "to provide a primary source of information to explain events during the Cold War", isCorrect: false },
+              { text: "to give an example of resistance methods that can be modeled to other societies", isCorrect: false },
+              { text: "to develop policies of religious toleration and consideration of traditional cultures", isCorrect: false }
+            ],
+            hint: "The speaker is a local clan member experiencing the direct erosion of his society's customs.",
+            explanation: "Achebe's work captures the psychological and cultural perspective of colonized populations witnessing the destruction of their customs.",
+            visual: null
+          },
+          {
+            levelNum: 11,
+            title: "Southeast Asia Colonization",
+            passage: "From: Southeast Asian Geopolitical Records, territorial borders, late 1800s\n\nImperial archives track the rapid expansion of Western colonial control across Southeast Asia, with French forces establishing French Indochina, British administrators consolidating control over Burma and Malaya, and the Dutch expanding their holdings across the Dutch East Indies.",
+            question: "Countries from which part of the world gained the most power in Southeast Asia during the late 1800s?",
+            options: [
+              { text: "Europe", isCorrect: true },
+              { text: "North America", isCorrect: false },
+              { text: "Africa", isCorrect: false },
+              { text: "Southwest Asia", isCorrect: false }
+            ],
+            hint: "Look at the colonial powers controlling these regions: Britain, France, and the Netherlands.",
+            explanation: "European nations consolidated absolute political and economic power across Southeast Asia during the High Imperialism phase of the late 19th century.",
+            visual: null
+          },
+          {
+            levelNum: 12,
+            title: "French Rule in Vietnam",
+            passage: "From: Tran Van Don, Our Endless War: Inside Vietnam, Presidio Press, 1978\n\nFrench Colonization of Vietnam . . . Economic development always involved what benefited France and her French colonists, not the Vietnamese. Vietnam was kept as dependent on the mother country as possible, both as a source of raw materials and as a captive market for French manufactured goods. Customs regulations were designed to promote French products and discourage competition from foreign goods, thus restricting the consumer in what he could buy. A less shortsighted administration could have predicted the eventual outcome of these restrictive policies, but it took raw armed force to shock the French and the rest of the world into the realities of the situation. In a few words, the people were getting fed up. . . .",
+            question: "Which statement best describes Tran Van Don’s point of view regarding the French in Vietnam?",
+            options: [
+              { text: "Vietnam’s economic development was restricted.", isCorrect: true },
+              { text: "Vietnam’s economy benefited from French presence.", isCorrect: false },
+              { text: "The Vietnamese exported many consumer goods.", isCorrect: false },
+              { text: "The economies of France and Vietnam benefited equally.", isCorrect: false }
+            ],
+            hint: "How does the author characterize the dependency of Vietnam and the design of the customs regulations?",
+            explanation: "The author directly highlights how French policies kept Vietnam completely dependent, strictly restricting domestic consumer markets and overall economic growth.",
+            visual: null
+          },
+          {
+            levelNum: 13,
+            title: "Long-term Vietnamese Impact",
+            passage: "From: Tran Van Don, Our Endless War: Inside Vietnam, Presidio Press, 1978\n\nFrench Colonization of Vietnam . . . Economic development always involved what benefited France and her French colonists, not the Vietnamese... Customs regulations were designed to promote French products and discourage competition... A less shortsighted administration could have predicted the eventual outcome... but it took raw armed force to shock the French and the rest of the world... In a few words, the people were getting fed up. . . .",
+            question: "What was a long-term effect of the situation described in this passage?",
+            options: [
+              { text: "Vietnamese nationalism led to bloody conflict.", isCorrect: true },
+              { text: "Soviet troops liberated the Vietnamese from French rule.", isCorrect: false },
+              { text: "The French agreed to rule northern Vietnam.", isCorrect: false },
+              { text: "Vietnamese resistance led to the establishment of Indochina.", isCorrect: false }
+            ],
+            hint: "Look at the mention of the people getting 'fed up' and using 'raw armed force' to shift the realities.",
+            explanation: "French economic exploitation and colonial limitations catalyzed strong nationalist feelings, leading directly to the First Indochina War and the Vietnam War.",
+            visual: null
+          },
+          {
+            levelNum: 14,
+            title: "Meiji Industrialization",
+            passage: "From: Brett L. Walker, A Concise History of Japan, Cambridge University Press, 2015\n\n. . .The importation of Western civilization opened a gaping chasm between town and country, between educated and uneducated, between connected and unconnected, and above all between the rich and poor. Nowhere were Japan’s growing pains felt more sorely than in the countryside, where the weight of Meiji reforms crushed many farmers, who enjoyed few of the fruits of Japan’s nineteenth-century enlightenment. In large part, the situation persisted until the abolishment of the tenancy system and the dramatic reforms initiated during the US occupation. . . .",
+            question: "The Japanese social and economic changes of the late 19th century described in the passage were a result of:",
+            options: [
+              { text: "rapid industrialization", isCorrect: true },
+              { text: "isolationist policies", isCorrect: false },
+              { text: "the Russo-Japanese War", isCorrect: false },
+              { text: "Marxist labor reforms", isCorrect: false }
+            ],
+            hint: "Look at the mention of 'Meiji reforms' and the heavy economic shifts that westernized the island.",
+            explanation: "To secure its sovereignty against Western powers, the Meiji Restoration initiated rapid state-led industrialization and modernization.",
+            visual: null
+          },
+          {
+            levelNum: 15,
+            title: "Japanese Social Inequalities",
+            passage: "From: Brett L. Walker, A Concise History of Japan, Cambridge University Press, 2015\n\n. . .The importation of Western civilization opened a gaping chasm between town and country, between educated and uneducated, between connected and unconnected, and above all between the rich and poor. Nowhere were Japan’s growing pains felt more sorely than in the countryside, where the weight of Meiji reforms crushed many farmers, who enjoyed few of the fruits of Japan’s nineteenth-century enlightenment...",
+            question: "Which claim about the impacts of foreign influence in Japan is best supported by this passage?",
+            options: [
+              { text: "Changes in methods of production increased social and economic inequality.", isCorrect: true },
+              { text: "New agricultural technologies increased the demand for farm laborers.", isCorrect: false },
+              { text: "Public education opened new employment opportunities for Japanese women.", isCorrect: false },
+              { text: "Newly opened markets for exports enhanced the wealth of most Japanese farmers.", isCorrect: false }
+            ],
+            hint: "Look at the opening sentence outlining a 'gaping chasm' between specific groups under Western importation.",
+            explanation: "Walker explains that Meiji reforms and rapid modernization accelerated a massive gap in wealth and connection between urban areas and rural countrysides.",
+            visual: null
+          }
+        ]
+      },
+      {
+        category: "World Wars & Fascism",
+        shortName: "World Wars",
+        levels: [
+          {
+            levelNum: 1,
+            title: "Sparks of the Great War",
+            passage: "From: International Newspaper Headlines, WWI Outbreak, 1914\n\n“Germany, Austria-Hungary, and Italy Form Triple Alliance”\n“Serbian Nationalism Grows in Balkans”\n“Archduke Franz Ferdinand Assassinated in Bosnia”",
+            question: "The events in these headlines contributed most directly to the:",
+            options: [
+              { text: "beginning of World War I", isCorrect: true },
+              { text: "outbreak of the Cold War", isCorrect: false },
+              { text: "development of communist rule in Europe", isCorrect: false },
+              { text: "strengthening of European monarchies", isCorrect: false }
+            ],
+            hint: "Consider how mutual defense alliances and ethnic nationalism exploded in the summer of 1914.",
+            explanation: "The assassination of Archduke Franz Ferdinand activated interlocking alliances, drawing European powers into WWI.",
+            visual: null
+          },
+          {
+            levelNum: 2,
+            title: "Defining Militarism",
+            passage: "From: European Military Archives, pre-1914 structural forces of Europe\n\nKey military records track the rapid buildup of standing armies and the assembly of modern dreadnought fleets as European nations raced to project state power and secure geopolitical boundaries.",
+            question: "The term militarism can best be defined as:",
+            options: [
+              { text: "buildup of armaments in preparation for war", isCorrect: true },
+              { text: "loyalty to a nation or ethnic group", isCorrect: false },
+              { text: "avoidance of military involvement in civil wars", isCorrect: false },
+              { text: "control of territories for economic and political gain", isCorrect: false }
+            ],
+            hint: "What action involves amassing weapons, conscripting forces, and placing military planners at the center of state decisions?",
+            explanation: "Militarism is the policy of aggressively building up a nation's military strength and weapon stockpiles in anticipation of conflict.",
+            visual: null
+          },
+          {
+            levelNum: 3,
+            title: "Immediate Trigger of WWI",
+            passage: "From: Sarajevo Police and Imperial Austro-Hungarian Diplomatic Telegrams, June 1914\n\nOfficial transcripts detail the security planning and subsequent assassination of Austro-Hungarian royalty during an official parade in Bosnia, which initiated the diplomatic 'July Crisis'.",
+            question: "What was the immediate cause of World War I in Europe?",
+            options: [
+              { text: "assassination of the heir to the throne of the Austro-Hungarian Empire", isCorrect: true },
+              { text: "start of the civil war in Russia", isCorrect: false },
+              { text: "sinking of the British liner, Lusitania", isCorrect: false },
+              { text: "attack on Poland by the German army", isCorrect: false }
+            ],
+            hint: "Who was Archduke Franz Ferdinand and why was his death in Bosnia the turning point?",
+            explanation: "The assassination of Austro-Hungarian Archduke Franz Ferdinand by a Serbian nationalist triggered the alliance system, causing WWI.",
+            visual: null
+          },
+          {
+            levelNum: 4,
+            title: "Pre-War Armaments Spend",
+            passage: "From: Treasury Records of European Military Expenditures, 1890–1914\n\nFinancial statements show defense budgets soaring exponentially. Pre-war German naval investments and land forces grew faster than those of any neighboring continental nation.",
+            question: "Which of the following is an accurate statement based on pre-war militarism and armaments spending around 1914?",
+            options: [
+              { text: "Germany spent more money on its military than did any other European nation.", isCorrect: true },
+              { text: "In 1914, Austria-Hungary attempted to end the arms race in Europe.", isCorrect: false },
+              { text: "In 1914, Russia was the most militaristic of all the European nations.", isCorrect: false },
+              { text: "In 1914, European powers spent less on military programs than on social infrastructure.", isCorrect: false }
+            ],
+            hint: "Think about the massive scale of German industrial military expansion and fleet building under Kaiser Wilhelm II.",
+            explanation: "Historical military spending records from 1914 confirm that imperial Germany led all continental European nations in absolute defense spending.",
+            visual: null
+          },
+          {
+            levelNum: 5,
+            title: "Tensions of Alliance Maps",
+            passage: "From: Diplomatic Treaty Files, European Alliance Systems, 1914\n\nTreaty records show Europe divided into two hostile, highly structured military frameworks: the Triple Alliance (Germany, Austria-Hungary, Italy) and the Triple Entente (France, Great Britain, Russia).",
+            question: "What conclusion can be drawn about the alliances depicted on 1914 European maps?",
+            options: [
+              { text: "The alliances increased tensions by dividing Europe into opposing military camps.", isCorrect: true },
+              { text: "The alliances prevented the spread of conflict by creating a balance of power.", isCorrect: false },
+              { text: "Italy was the strongest member of the Triple Alliance.", isCorrect: false },
+              { text: "Russia’s alliance limited its involvement in European affairs.", isCorrect: false }
+            ],
+            hint: "If a local war starts between two nations, what happens when all powers are bound to mutual defense pacts?",
+            explanation: "The alliance system turned a localized conflict in the Balkans into a general European war by binding opposing coalitions together.",
+            visual: null
+          },
+          {
+            levelNum: 6,
+            title: "Arthur Empey: Trench Gas",
+            passage: "From: Arthur Empey, Over the Top (G.P. Putnam’s Sons, 1917)\n\n“Gas could sometimes travel as far as fifteen miles behind the front lines, causing devastating effects. A gas helmet—sometimes called a smoke helmet—was an unpleasant piece of equipment. At best, it reeked horribly, and wearing it for long periods often caused severe headaches. In response to the gas clouds, our artillery fired eighteen-pound shells into No Man’s Land, hoping to disperse the toxic fumes. The men were crouched along the fire step, their bayonets fixed and bombs within reach, ready to repel the anticipated German attack. Our artillery had laid down a curtain of fire to disrupt the German lines and stop reinforcements from advancing. I focused my machine gun on their trench, spraying bullets along the parapet. Then they charged. Their bayonets glistened in the dim light, and their gas masks, with their large snouts, made them look like terrifying creatures from a nightmare.”",
+            question: "A historian could best use this passage to study which topic of World War I?",
+            options: [
+              { text: "equipment utilized by soldiers", isCorrect: true },
+              { text: "events that started the war", isCorrect: false },
+              { text: "impact of combat on civilians", isCorrect: false },
+              { text: "propaganda that supported the war effort", isCorrect: false }
+            ],
+            hint: "The narrator explicitly references artillery shells, machine guns, bayonets, and gas masks.",
+            explanation: "The text documents the highly specialized physical technology and protective gear (like early gas masks) used by combatants in the trenches.",
+            visual: null
+          },
+          {
+            levelNum: 7,
+            title: "Destruction of Technology",
+            passage: "From: Arthur Empey, Over the Top (G.P. Putnam’s Sons, 1917)\n\n“Gas could sometimes travel as far as fifteen miles behind the front lines, causing devastating effects. A gas helmet—sometimes called a smoke helmet—was an unpleasant piece of equipment. At best, it reeked horribly, and wearing it for long periods often caused severe headaches...”",
+            question: "Which claim can best be supported by this passage?",
+            options: [
+              { text: "New technology made warfare more destructive.", isCorrect: true },
+              { text: "Warfare had a limited impact on the environment.", isCorrect: false },
+              { text: "Countries engaged in war were punished for their actions.", isCorrect: false },
+              { text: "Illness and disease took many lives.", isCorrect: false }
+            ],
+            hint: "Consider the descriptions of chemical gas clouds, continuous artillery barrages, and mass machine gun fire.",
+            explanation: "Arthur Empey's narrative illustrates how modern chemical weapons and automated firepower dramatically elevated the lethality of battlefield combat.",
+            visual: null
+          },
+          {
+            levelNum: 8,
+            title: "Posters & Total War",
+            passage: "From: Government Propaganda Archives, Military Recruitment Posters, 1915\n\nPropaganda documents designed by ministries of war appeal directly to young citizens, highlighting threats to family safety and evoking civic duty to mobilize human resources for total war.",
+            question: "Which concept is represented in these recruiting posters?",
+            options: [
+              { text: "nationalism", isCorrect: true },
+              { text: "justice", isCorrect: false },
+              { text: "diversity", isCorrect: false },
+              { text: "humanism", isCorrect: false }
+            ],
+            hint: "These posters appeal to intense pride in one's country and the duty to defend the state from enemies.",
+            explanation: "Nationalism was heavily mobilized during WWI, with states using propaganda posters to build public support and drive military enlistment.",
+            visual: null
+          },
+          {
+            levelNum: 9,
+            title: "Wilson's Self-Determination",
+            passage: "From: President Woodrow Wilsonʼs Fourteen Points, 1918\n\n“. . . A free, open-minded, and absolutely impartial adjustment of all colonial claims, based upon a strict observance of the principle that in determining all such questions of sovereignty the interests of the populations concerned must have equal weight with the equitable claims of the government whose title is to be determined. . . .”",
+            question: "This statement held appeal for nationalists in areas under colonial control because it suggested:",
+            options: [
+              { text: "national self-determination", isCorrect: true },
+              { text: "economic development", isCorrect: false },
+              { text: "a system of alliances", isCorrect: false },
+              { text: "protection from terrorists", isCorrect: false }
+            ],
+            hint: "Nationalists wanted the freedom to govern themselves. Which phrase describes a group choosing its own sovereignty?",
+            explanation: "Woodrow Wilson's core proposal of self-determination inspired colonized groups to demand sovereignty and political freedom.",
+            visual: null
+          },
+          {
+            levelNum: 10,
+            title: "Redrawn Interwar Boundaries",
+            passage: "From: Versailles Peace Treaty Geopolitical Boundary Files, 1919\n\nComparing borders:\nMap A: Europe in 1914 (showing the massive Austro-Hungarian, German, Russian, and Ottoman Empires).\nMap B: Europe in 1919 (showing independent nations: Poland, Czechoslovakia, Yugoslavia, Austria, Hungary, Finland, Estonia, Latvia, Lithuania).",
+            question: "Which factor was the most significant force in causing the changes between 1914 and 1919 shown on these maps?",
+            options: [
+              { text: "treaties signed at the end of World War I", isCorrect: true },
+              { text: "worldwide depression", isCorrect: false },
+              { text: "rise of Mussolini", isCorrect: false },
+              { text: "dissatisfaction of the German people", isCorrect: false }
+            ],
+            hint: "What was negotiated at the Paris Peace Conference in 1919 that formally dismantled defeated empires?",
+            explanation: "The Treaty of Versailles and other post-WWI peace treaties dismantled defeated empires, redrawing the political map of Central Europe.",
+            visual: null
+          },
+          {
+            levelNum: 11,
+            title: "Sassoon's Trench Reality",
+            passage: "From: Siegfried Sassoon, Attack, 1918\n\n“At dawn the ridge emerges massed and dun in the wild purple of the glow’ring sun, Smouldering through spouts of drifting smoke that shroud The menacing scarred slope; and, one by one, Tanks creep and topple forward to the wire. The barrage roars and lifts. Then, clumsily bowed. With bombs and guns and shovels and battle-gear, Men jostle and climb to meet the bristling fire. Lines of grey, muttering faces, masked with fear, They leave their trenches, going over the top, While time ticks blank and busy on their wrists, And hope, with furtive eyes and grappling fists, Flounders in mud. O Jesus, make it stop!”",
+            question: "Which event influenced the writing of this poem?",
+            options: [
+              { text: "World War I", isCorrect: true },
+              { text: "the Russian Revolution", isCorrect: false },
+              { text: "World War II", isCorrect: false },
+              { text: "the Korean War", isCorrect: false }
+            ],
+            hint: "The text references trenches, going 'over the top', gas masks, and thick mud.",
+            explanation: "Sassoon's poem depicts the terrifying nature of frontline infantry trench warfare, which was the defining feature of WWI's Western Front.",
+            visual: null
+          },
+          {
+            levelNum: 12,
+            title: "Totalitarian Headlines",
+            passage: "From: International News Bulletins, Interwar Political Dictatorships\n\n“Stalin Solidifies Power for Communists”\n“Adolf Hitler Declares Third Reich”\n“Mussolini Establishes Fascist State”",
+            question: "Which situation was most responsible for the rise of the political systems referred to in these headlines?",
+            options: [
+              { text: "worldwide economic instability", isCorrect: true },
+              { text: "unification of Italy", isCorrect: false },
+              { text: "conflicts between European nations over Africa", isCorrect: false },
+              { text: "emergence of the United States as a world power", isCorrect: false }
+            ],
+            hint: "What global economic event starting in 1929 wiped out jobs and savings, pushing citizens toward radical leaders?",
+            explanation: "The worldwide Great Depression and interwar hyperinflation destabilized democratic regimes, allowing charismatic autocrats to gain support.",
+            visual: null
+          },
+          {
+            levelNum: 13,
+            title: "Mussolini on Censorship",
+            passage: "From: Benito Mussolini, Fascism: Doctrine and Institutions, 1932\n\n“Why should freedom of speech and freedom of the press be allowed? Why should a government, doing what it believes is right, allow itself to be criticized? It would not allow opposition by lethal weapons. Ideas are much more fatal things than guns.”",
+            question: "Which political belief would this speaker support?",
+            options: [
+              { text: "The needs of the state are more important than the rights of individuals.", isCorrect: true },
+              { text: "Societies need war to bring about progress.", isCorrect: false },
+              { text: "Education is a necessary ingredient for a stable society.", isCorrect: false },
+              { text: "All people are born with certain natural rights.", isCorrect: false }
+            ],
+            hint: "Look at Mussolini's argument that ideas are 'fatal things' and a state should not tolerate criticism.",
+            explanation: "Fascism rejects classical individualism, asserting that personal civil liberties must be entirely subordinated to the absolute authority of the state.",
+            visual: null
+          },
+          {
+            levelNum: 14,
+            title: "The Munich Chamberlain Pact",
+            passage: "From: William Shirer, CBS radio report from Prague, September 29, 1938\n\n“It took the Big Four just five hours and twenty-five minutes here in Munich today to dispel the clouds of war and come to an agreement over the partition of Czechoslovakia. There is to be no European war, after all. There is to be peace, and the price of that peace is, roughly, the ceding by Czechoslovakia of the Sudeten territory to Herr Hitler’s Germany. The German Führer gets what he wanted, only he has to wait a little longer for it. Not much longer though — only ten days. . . .”",
+            question: "One reason that Britain and France agreed to appease Hitler at the Munich Conference was to:",
+            options: [
+              { text: "prevent the start of another world war", isCorrect: true },
+              { text: "stop the Nazis from invading the Soviet Union", isCorrect: false },
+              { text: "obey an order from the League of Nations", isCorrect: false },
+              { text: "obtain advanced German military weapons in exchange", isCorrect: false }
+            ],
+            hint: "Haunted by the trauma of WWI, what was the primary goal of British and French leaders?",
+            explanation: "Britain and France pursued a policy of appeasement, sacrificing Czechoslovakian territory in the desperate hope of avoiding a general European war.",
+            visual: null
+          },
+          {
+            levelNum: 15,
+            title: "D-Day Allied Significance",
+            passage: "From: Allied Supreme Command Logs, Operation Overlord Normandy Planning, June 1944\n\nMilitary records detail the launch of a massive amphibious assault by American, British, and Canadian forces across the English Channel, successfully securing Allied positions in German-occupied France.",
+            question: "During World War II, the Allied invasion of France on D-Day (June 6, 1944) was significant because it:",
+            options: [
+              { text: "forced Germans to fight a two-front war", isCorrect: true },
+              { text: "demonstrated the power of the atomic bomb", isCorrect: false },
+              { text: "resulted in a successful German revolt against Hitler", isCorrect: false },
+              { text: "led to the immediate surrender of German and Italian forces", isCorrect: false }
+            ],
+            hint: "With Soviet forces pushing from the East, how did the Normandy landings impact the German military's layout?",
+            explanation: "The D-Day landings opened a Western Front, forcing Nazi Germany to divide its forces and fight an exhausting two-front war.",
+            visual: null
+          }
+        ]
+      },
+      {
+        category: "Decolonization & Modernization",
+        shortName: "Modernization",
+        levels: [
+          {
+            levelNum: 1,
+            title: "Indian Independence Views",
+            passage: "From: Mohandas Gandhi, Indian Home Rule, 1938/1946\n\n. . “Because India has become impoverished by their Government. They take away our money from year to year. The most important posts are reserved for themselves. We are kept in a state of slavery. They behave insolently towards us and disregard our feelings. . . .”",
+            question: "A historian would find this excerpt most useful for:",
+            options: [
+              { text: "Understanding the views of Indian nationalists.", isCorrect: true },
+              { text: "Examining the effects of Belgian rule in the Congo.", isCorrect: false },
+              { text: "Exploring the points of view of Muslims concerning British rule in India.", isCorrect: false },
+              { text: "Examining the economic benefits of imperialism for British citizens.", isCorrect: false }
+            ],
+            hint: "Who wrote Hind Swaraj (Indian Home Rule) and fought British colonial taxation and rule?",
+            explanation: "Gandhi's text is a key primary source articulating the perspective of Indian nationalists seeking autonomy and criticizing British mercantilist drain.",
+            visual: null
+          },
+          {
+            levelNum: 2,
+            title: "Decolonization Outcomes",
+            passage: "From: Mohandas Gandhi, Indian Home Rule, 1938/1946\n\n. . “Because India has become impoverished by their Government. They take away our money from year to year. The most important posts are reserved for themselves. We are kept in a state of slavery. They behave insolently towards us and disregard our feelings. . . .”",
+            question: "Which event was a direct effect of the ideas expressed in this excerpt and the subsequent actions taken by Gandhi?",
+            options: [
+              { text: "Independence for India and Pakistan", isCorrect: true },
+              { text: "Amritsar Massacre", isCorrect: false },
+              { text: "Sepoy Rebellion", isCorrect: false },
+              { text: "Establishment of the British Raj in India", isCorrect: false }
+            ],
+            hint: "The struggle against British control culminated in the partition and independence of South Asia in 1947.",
+            explanation: "Nationalist mobilization led by Gandhi and others ultimately forced Britain to withdraw, resulting in the independence of India and Pakistan.",
+            visual: null
+          },
+          {
+            levelNum: 3,
+            title: "Civil Disobedience Strategies",
+            passage: "From: International Press Reports, Mohandas Gandhi's Campaigns, 1930\n\n“Gandhi Calls for Boycott of British Textiles”\n“Gandhi and Followers Complete March to the Sea”\n“Gandhi Begins Hunger Fast”",
+            question: "These headlines reflect Gandhi’s belief in:",
+            options: [
+              { text: "civil disobedience", isCorrect: true },
+              { text: "nonalignment", isCorrect: false },
+              { text: "appeasement", isCorrect: false },
+              { text: "isolationism", isCorrect: false }
+            ],
+            hint: "What strategy involves peacefully refusing to obey unjust laws or buying colonial monopolized products?",
+            explanation: "Gandhi pioneered satyagraha (civil disobedience/soul force) to challenge British authority non-violently.",
+            visual: null
+          },
+          {
+            levelNum: 4,
+            title: "Ho Chi Minh's Rationale",
+            passage: "From: Ho Chi Minh, Declaration of Independence of the Republic of Vietnam, September 2, 1945\n\n“Nevertheless, for more than eighty years, the French imperialists, abusing the standard of Liberty, Equality and Fraternity, have violated our Fatherland and oppressed our fellow-citizens. They have acted contrary to the ideals of humanity and justice...”",
+            question: "Which historical circumstance in Vietnam led to the statements in this speech?",
+            options: [
+              { text: "Colonial Rule", isCorrect: true },
+              { text: "Famine", isCorrect: false },
+              { text: "Détente", isCorrect: false },
+              { text: "Trade embargo", isCorrect: false }
+            ],
+            hint: "For over eighty years, which European power directly held Indochina (Vietnam) as an overseas colony?",
+            explanation: "Ho Chi Minh's speech was written to declare independence from French colonial rule following the end of Japanese occupation in WWII.",
+            visual: null
+          },
+          {
+            levelNum: 5,
+            title: "Ho Chi Minh's Purpose",
+            passage: "From: Ho Chi Minh, Declaration of Independence of the Republic of Vietnam, September 2, 1945\n\n“To declare to the world our independence... We are convinced that the Allied nations which at Tehran and San Francisco have acknowledged the principles of self-determination and equality of nations, will not refuse to acknowledge the independence of Vietnam...”",
+            question: "The main purpose of this speech was to:",
+            options: [
+              { text: "appeal to Western nations to support Vietnamese independence", isCorrect: true },
+              { text: "prevent the people of Vietnam from fighting for their independence", isCorrect: false },
+              { text: "allow for the peaceful transition of power in Vietnam from France to the Allies", isCorrect: false },
+              { text: "rally support among the Vietnamese people to join forces with the French against the Allies", isCorrect: false }
+            ],
+            hint: "Look at the references to Allied summits and principles of global self-determination.",
+            explanation: "Ho Chi Minh sought diplomatic recognition and support from the international community (particularly the US and Allies) for a newly sovereign Vietnam.",
+            visual: null
+          },
+          {
+            levelNum: 6,
+            title: "Atatürk's Secular Program",
+            passage: "From: Kemal Atatürk, Speech to the Grand National Assembly of Turkey (Nutuk), 1927\n\n“We must liberate our concepts of justice, our laws and legal institutions from the bonds which hold a tight grip on us although they are incompatible with the needs of our century... The cornerstone of education is an easy system of reading and writing. The key to this is the new Turkish alphabet based on the Latin script.”",
+            question: "What changed in Turkey as a direct result of Atatürk’s efforts?",
+            options: [
+              { text: "Turkey adopted a more modern Western orientation.", isCorrect: true },
+              { text: "Turkey’s government was dominated by Islamic clerics.", isCorrect: false },
+              { text: "Secularism in Turkey was universally accepted.", isCorrect: false },
+              { text: "Communist forces seized power in Turkey.", isCorrect: false }
+            ],
+            hint: "Look at the introduction of the Latin script, secular civil courts, and modernization.",
+            explanation: "Atatürk introduced rapid secularization and modernization, transforming Turkey into a Western-oriented nation.",
+            visual: null
+          },
+          {
+            levelNum: 7,
+            title: "Comparative Modernization",
+            passage: "From: Kemal Atatürk, Speech to the Grand National Assembly of Turkey (Nutuk), 1927\n\n“We must liberate our concepts of justice, our laws and legal institutions from the bonds which hold a tight grip on us although they are incompatible with the needs of our century... The cornerstone of education is an easy system of reading and writing. The key to this is the new Turkish alphabet based on the Latin script.”",
+            question: "The overall change desired by Atatürk is similar to the change enacted in:",
+            options: [
+              { text: "Japan under the Meiji Restoration", isCorrect: true },
+              { text: "South Africa during the period of apartheid", isCorrect: false },
+              { text: "the Soviet Union during the period of détente", isCorrect: false },
+              { text: "India under nonalignment", isCorrect: false }
+            ],
+            hint: "Which late 19th-century Japanese reform movement also initiated rapid state westernization to modernize the country?",
+            explanation: "The reforms of Atatürk in Turkey and the Meiji Restoration in Japan both sought to modernize their countries using Western political, educational, and military models.",
+            visual: null
+          },
+          {
+            levelNum: 8,
+            title: "Kemal Atatürk on Secular State",
+            passage: "From: Kemal Atatürk, adapted speech on State Secularism, 1924\n\n“Our revolution is directed against the old order… We must adopt the institutions of the modern world if we are to survive. Religion must be separated from the affairs of the state so that progress can be achieved.”",
+            question: "Which development best illustrates the policy of secularism under Mustafa Kemal Atatürk?",
+            options: [
+              { text: "The adoption of European-style legal and education systems", isCorrect: true },
+              { text: "The strengthening of religious courts in government", isCorrect: false },
+              { text: "The expansion of Islamic education across rural regions", isCorrect: false },
+              { text: "The promotion of pan-Islamic unity across the Middle East", isCorrect: false }
+            ],
+            hint: "Look for secular institutions separating spiritual affairs from law and learning.",
+            explanation: "Atatürk dismantled Islamic Sharia courts and religious schools, replacing them with modern, Western-inspired secular legal and educational codes.",
+            visual: null
+          },
+          {
+            levelNum: 9,
+            title: "Comparative Leadership",
+            passage: "From: Kemal Atatürk, adapted speech on State Secularism, 1924\n\n“Our revolution is directed against the old order… We must adopt the institutions of the modern world if we are to survive. Religion must be separated from the affairs of the state so that progress can be achieved.”",
+            question: "Which statement best explains a similarity between Atatürk’s reforms in Turkey and the Shah’s reforms in Iran?",
+            options: [
+              { text: "Both leaders attempted to modernize their countries using Western models", isCorrect: true },
+              { text: "Both leaders promoted theocracy as a form of government", isCorrect: false },
+              { text: "Both leaders rejected industrial development", isCorrect: false },
+              { text: "Both leaders eliminated all foreign influence", isCorrect: false }
+            ],
+            hint: "Think about how both Middle Eastern autocrats looked to Europe to transform their laws, clothes, and economies.",
+            explanation: "Both Atatürk in Turkey and Shah Reza Pahlavi (and his son) in Iran pursued aggressive, state-led Westernization and top-down modernization.",
+            visual: null
+          },
+          {
+            levelNum: 10,
+            title: "UN Palestine Partition",
+            passage: "From: United Nations General Assembly, Official Resolution 181 (Palestine Partition), 1947\n\n“The General Assembly... Recommends to the United Kingdom, as the mandatory Power for Palestine, and to all other Members of the United Nations the adoption and implementation, with regard to the future government of Palestine, of the Plan of Partition with Economic Union...”",
+            question: "Which situation was a direct result of the United Nations’ partition of Palestine in 1947?",
+            options: [
+              { text: "Increased conflict between Jewish and Arab communities", isCorrect: true },
+              { text: "The peaceful unification of Arab and Jewish populations", isCorrect: false },
+              { text: "The immediate creation of a single independent Palestinian state", isCorrect: false },
+              { text: "The return of Ottoman control to the region", isCorrect: false }
+            ],
+            hint: "The resolution aimed to divide the land but was rejected by Arab nations, sparking the 1948 war.",
+            explanation: "The partition plan triggered immediate violence and the 1948 Arab-Israeli War, creating a long-standing geopolitical conflict in the Middle East.",
+            visual: null
+          },
+          {
+            levelNum: 11,
+            title: "1953 Iranian Coup Operations",
+            passage: "From: US State Department and CIA Declassified Records, Operation Ajax, 1953\n\n“The military coup which overthrew Mossadegh was carried out under CIA direction as an act of US foreign policy... It was estimated that the rise of Mossadegh threatened Western control over Iranian oil resources and opened a potential path for Soviet communist expansion in the Middle East. The Shah was subsequently returned to the throne as absolute ruler, ensuring a pro-Western government...”",
+            question: "Based on these declassified records, what was a primary geopolitical motive for the Western-backed 1953 coup in Iran?",
+            options: [
+              { text: "Securing Western control over oil resources and containing Soviet influence.", isCorrect: true },
+              { text: "Supporting democratic elections to expand voting rights for Iranian women.", isCorrect: false },
+              { text: "Preventing the rise of an absolute Islamic theocracy under Khomeini.", isCorrect: false },
+              { text: "Overthrowing the Shah to establish a socialist planned economy.", isCorrect: false }
+            ],
+            hint: "Look at the mention of threats to oil resources and the potential path for Soviet expansion.",
+            explanation: "The US and Britain orchestrated the 1953 coup (Operation Ajax) to depose the democratically elected PM Mossadegh, who had nationalized Iran's oil industry.",
+            visual: null
+          },
+          {
+            levelNum: 12,
+            title: "Pahlavi Legal Reform",
+            passage: "From: Haleh Esfandiari, The Iran Primer (United States Institute of Peace, 2010)\n\n“Iranian women made considerable progress during the Pahlavi era (1925–1979). Education for both girls and boys was free. When Tehran University opened in 1936, Iran’s first university admitted both men and women. In 1963, women acquired the right to vote and run for parliament. Under the Family Protection Law, women won the right to petition for divorce and gain child custody. A husband could no longer unilaterally (single-handedly) divorce his wife or automatically gain custody of the children...”",
+            question: "What conclusion can be made regarding women's rights during the Pahlavi era?",
+            options: [
+              { text: "Iranian women made legal, political, and educational progress.", isCorrect: true },
+              { text: "Traditional Islamic norms were strictly enforced by the court systems.", isCorrect: false },
+              { text: "The Pahlavi dynasty banned women from attending university programs.", isCorrect: false },
+              { text: "Women were banned from participating in civil service and elected councils.", isCorrect: false }
+            ],
+            hint: "Examine the advancements mentioned: free education, voting, divorce rights, and university access.",
+            explanation: "The document highlights major modern developments, including secular education, female voting rights, marriage age hikes, and legislative protections.",
+            visual: null
+          },
+          {
+            levelNum: 13,
+            title: "Khomeini on Theocratic Law",
+            passage: "From: Ayatollah Ruhollah Khomeini, Lectures on Islamic Government (Velayat-e Faqih), 1970\n\n“The body of Islamic laws that exist in the Quran and the Sunnah are accepted by Muslims... In order to assure that these laws are implemented, we must establish an Islamic state... This state must reject the corrupt Western laws and the secular models introduced by the imperialists. The absolute authority must lie in the hands of the Islamic jurists (clergy) who understand the divine law...”",
+            question: "Based on this passage, Ayatollah Khomeini believed that the state should be organized as a:",
+            options: [
+              { text: "Theocracy dominated by Islamic clergy and traditional law", isCorrect: true },
+              { text: "Secular republic modeled after modern European courts", isCorrect: false },
+              { text: "Communist mixed economy led by industrial factory councils", isCorrect: false },
+              { text: "Constitutional monarchy sharing power with parliament", isCorrect: false }
+            ],
+            hint: "The text emphasizes that 'absolute authority must lie in the hands of the Islamic jurists'.",
+            explanation: "Khomeini advocated for Velayat-e Faqih (Guardianship of the Jurist), which became the structural basis for Iran's post-1979 Islamic theocracy.",
+            visual: null
+          },
+          {
+            levelNum: 14,
+            title: "Deng's Market Speeches",
+            passage: "From: Deng Xiaoping, Selected Works of Deng Xiaoping, Vol. 3 (Speeches during Southern Tour, 1992)\n\n“We must understand that the proportion of planning to market forces is not the essential difference between socialism and capitalism. A planned economy is not equivalent to socialism, because there is planning under capitalism too; a market economy is not capitalism, because there are markets under socialism too. Both planning and market forces are economic methods... If we combine them, we can liberate the productive forces...”",
+            question: "Which economic reform did Deng Xiaoping propose in this speech?",
+            options: [
+              { text: "Creating a mixed economy by introducing market mechanisms into socialism.", isCorrect: true },
+              { text: "Returning to a completely centralized Soviet-style planned economy.", isCorrect: false },
+              { text: "Adopting pure laissez-faire capitalism and abolishing the Communist Party.", isCorrect: false },
+              { text: "Banning private ownership and focusing on rural commune agriculture.", isCorrect: false }
+            ],
+            hint: "Deng argues that 'both planning and market forces are economic methods' that can be combined.",
+            explanation: "Deng Xiaoping's economic reforms ('Socialism with Chinese Characteristics') integrated free-market elements to boost China's industrial growth.",
+            visual: null
+          },
+          {
+            levelNum: 15,
+            title: "Meiji Imperial Values",
+            passage: "From: Emperor Mutsuhito (Meiji), Imperial Rescript on Education, 1890\n\n“Our Imperial Ancestors have founded Our Empire on a basis broad and everlasting... Know ye, Our subjects: Be filial to your parents, affectionate to your brothers and sisters; as husbands and wives be harmonious... always respect the Constitution and observe the laws; should emergency arise, offer yourselves courageously to the State; and thus guard and maintain the prosperity of Our Imperial Throne coeval with heaven and earth...”",
+            question: "How does the Imperial Rescript on Education represent the values of Meiji Japan?",
+            options: [
+              { text: "It combines Western-style civic obedience with traditional Confucian loyalty to the Emperor.", isCorrect: true },
+              { text: "It completely rejects Western technology and demands a return to samurai isolation.", isCorrect: false },
+              { text: "It advocates for the immediate transition into a secular socialist democracy.", isCorrect: false },
+              { text: "It encourages citizens to prioritize individual liberties over state demands.", isCorrect: false }
+            ],
+            hint: "Notice the call to obey laws (constitution) while courageously offering oneself to protect the Imperial Throne.",
+            explanation: "Meiji-era education emphasized rapid modernization and Western state laws while instilling deep, traditional loyalty to the Emperor.",
+            visual: null
+          }
+        ]
+      },
+      {
+        category: "Globalization & Human Rights",
+        shortName: "HumanRights",
+        levels: [
+          {
+            levelNum: 1,
+            title: "The Armenian Genocide",
+            passage: "From: Henry Morgenthau, Ambassador Morgenthau's Story (US Embassy Reports, 1915)\n\n“The systematic destruction of the Armenian population was planned by the Young Turk administration. Reports from our consuls in Aleppo, Harput, and Van confirm that entire populations are being driven into the Syrian deserts under the guise of deportation. Stripped of their possessions and denied food and water, hundreds of thousands are dying of starvation and systematic slaughter. This is an attempt to completely destroy a racial and religious minority...”",
+            question: "According to Henry Morgenthau, what was the primary purpose of the Ottoman policy toward the Armenians?",
+            options: [
+              { text: "To systematically destroy a racial and religious minority.", isCorrect: true },
+              { text: "To relocate them to modern industrial farming communes.", isCorrect: false },
+              { text: "To recruit them into the Ottoman Imperial army to fight Russia.", isCorrect: false },
+              { text: "To grant them autonomous voting rights within the empire.", isCorrect: false }
+            ],
+            hint: "The text calls the events a 'systematic destruction' and an 'attempt to completely destroy'.",
+            explanation: "Ambassador Morgenthau's reports are key historical evidence documenting the systematic nature of the 1915 Armenian Genocide.",
+            visual: null
+          },
+          {
+            levelNum: 2,
+            title: "Ukrainian Holodomor",
+            passage: "From: Miron Dolot, Execution by Hunger: The Hidden Holocaust (Eyewitness Testimony, 1932–1933)\n\n“The grain requisitions ordered by Moscow were impossible to meet. Armed brigades searched our houses, taking away the last pieces of bread and the seed saved for the next harvest. Those who hid a handful of wheat were shot or deported as saboteurs. The borders of Soviet Ukraine were closed to prevent peasants from escaping. Within months, our village became a graveyard of starving children. This artificial famine was engineered to crush Ukrainian peasant resistance to collective farming...”",
+            question: "According to this eyewitness testimony, how was the Holodomor famine created?",
+            options: [
+              { text: "The government requisitioned all grain and sealed borders, creating an artificial famine.", isCorrect: true },
+              { text: "A severe natural drought destroyed all agricultural crops across Eastern Europe.", isCorrect: false },
+              { text: "Foreign military invasions physically burned the wheat fields of Ukraine.", isCorrect: false },
+              { text: "Local peasants chose to stop farming to protest industrial factories.", isCorrect: false }
+            ],
+            hint: "Look at the mention of requisitions ordered by Moscow, brigades taking seeds, and closed borders.",
+            explanation: "Stalin's forced collectivization and aggressive grain seizures in 1932–1933 caused the Holodomor, a man-made famine that killed millions of Ukrainians.",
+            visual: null
+          },
+          {
+            levelNum: 3,
+            title: "Flora Lewis: Moral Lessons",
+            passage: "From: Flora Lewis, Column on the Holocaust, The New York Times, July 7, 1987\n\n“The important lesson wasn't so much the Nazis' extraordinary evil but that it could happen with the participation of so many, the indifference of many more, that humanity has no guarantees against its vicious streaks except its own conscience, for which each individual is responsible . . . the effort for decency and justice must go on every day, everywhere.”",
+            question: "What is the author's point of view in this passage?",
+            options: [
+              { text: "Individuals have a moral obligation to oppose immoral policies.", isCorrect: true },
+              { text: "Wartime actions should not be judged by standard moral rules.", isCorrect: false },
+              { text: "People who follow orders should not be held responsible.", isCorrect: false },
+              { text: "Decency and justice are automatically guaranteed by international law.", isCorrect: false }
+            ],
+            hint: "Look at the emphasis on 'vicious streaks' and how each 'individual is responsible' to make an effort for decency.",
+            explanation: "Lewis argues that the primary lesson of the Holocaust is individual accountability and the collective duty to actively resist systemic evil.",
+            visual: null
+          },
+          {
+            levelNum: 4,
+            title: "Helen's Auschwitz Survival",
+            passage: "From: Ayer et al., Parallel Journeys (Aladdin Paperbacks, 2000)\n\n“It was dangerous to stand out from the crowd because of illness or any other reason. Once a prisoner became known to the guards, he or she was a target for abuse or 'special' treatment. By staying invisible, by being nothing more than the number tattooed on your forearm, you stood a chance of living longer. Disappearing in the crowd helped Helen stay alive for the two months she was in Auschwitz. During this time, she survived three more selections by Dr. Mengele...”",
+            question: "Which historical event is documented in this passage?",
+            options: [
+              { text: "The Holocaust", isCorrect: true },
+              { text: "The Rwandan Genocide", isCorrect: false },
+              { text: "The Amritsar Massacre", isCorrect: false },
+              { text: "The Armenian Genocide", isCorrect: false }
+            ],
+            hint: "The text references a concentration camp (Auschwitz), tattooed forearms, and selections.",
+            explanation: "This passage describes the horrific conditions and selection processes inside the Auschwitz-Birkenau death camp during the Holocaust.",
+            visual: null
+          },
+          {
+            levelNum: 5,
+            title: "Declaration of Human Rights",
+            passage: "From: United Nations General Assembly, Universal Declaration of Human Rights, 1948\n\n“Article 1: All human beings are born free and equal in dignity and rights... Article 3: Everyone has the right to life, liberty and security of person... Article 5: No one shall be subjected to torture or to cruel, inhuman or degrading treatment or punishment...”",
+            question: "The primary purpose of this international document is to:",
+            options: [
+              { text: "Establish global standards protecting the basic rights and dignity of all people.", isCorrect: true },
+              { text: "Provide a military alliance to defend Western Europe from communist expansion.", isCorrect: false },
+              { text: "Allow nations to colonize overseas territories for economic profit.", isCorrect: false },
+              { text: "Regulate global trade tariffs and protect multinational corporations.", isCorrect: false }
+            ],
+            hint: "The text lists universal rights to freedom, life, liberty, and protection from torture.",
+            explanation: "Written in the wake of WWII and the Holocaust, the UDHR was adopted by the UN to codify universal human rights.",
+            visual: null
+          },
+          {
+            levelNum: 6,
+            title: "Tiananmen Square Protest",
+            passage: "From: Beijing Student Hunger Strike Declaration, Tiananmen Square, May 13, 1989\n\n“In this beautiful month of May, we are beginning our hunger strike. Our country is in crisis—inflation is high, corruption is rampant, and the people have no voice. We do not seek to overthrow the state; we seek democratic dialogue and freedom of speech. We are using our young lives to demand that the government hear us...”",
+            question: "What was the primary goal of the student protesters in Tiananmen Square?",
+            options: [
+              { text: "Democratic dialogue and the protection of civil liberties like free speech.", isCorrect: true },
+              { text: "Establishing a traditional Islamic theocracy under local clergy.", isCorrect: false },
+              { text: "A return to radical collective farming under Soviet planned economics.", isCorrect: false },
+              { text: "Overthrowing the military alliance and joining forces with the West.", isCorrect: false }
+            ],
+            hint: "The text states: 'We do not seek to overthrow the state; we seek democratic dialogue and freedom of speech.'",
+            explanation: "In the spring of 1989, Chinese students led mass pro-democracy protests in Tiananmen Square, which were violently crushed by the military.",
+            visual: null
+          },
+          {
+            levelNum: 7,
+            title: "Mandela's Release Speech",
+            passage: "From: Nelson Mandela, Cape Town Address upon Release from Prison, February 11, 1990\n\n“Our march to freedom is irreversible. We must not allow fear to stand in our way. Universal suffrage on a common voters’ roll in a united democratic and non-racial South Africa is the only way to peace and racial harmony. Apartheid has no future. It must be ended by the decisive action of our people...”",
+            question: "In this speech, Nelson Mandela is calling for the complete end of:",
+            options: [
+              { text: "Apartheid", isCorrect: true },
+              { text: "Universal suffrage", isCorrect: false },
+              { text: "Self-determination", isCorrect: false },
+              { text: "Nonalignment", isCorrect: false }
+            ],
+            hint: "The text explicitly states that this policy of institutionalized racial segregation 'has no future' and 'must be ended'.",
+            explanation: "Mandela's speech demanded the absolute dismantling of Apartheid, South Africa's system of institutionalized racial segregation.",
+            visual: null
+          },
+          {
+            levelNum: 8,
+            title: "Mandela's Universal Suffrage",
+            passage: "From: Nelson Mandela, Cape Town Address upon Release from Prison, February 11, 1990\n\n“Our march to freedom is irreversible... Universal suffrage on a common voters’ roll in a united democratic and non-racial South Africa is the only way to peace and racial harmony...”",
+            question: "What was a direct outcome of Mandela's successful struggle for universal suffrage?",
+            options: [
+              { text: "The end of white minority rule and the holding of free, multi-racial elections.", isCorrect: true },
+              { text: "Mass emigration of the native population to Europe.", isCorrect: false },
+              { text: "South Africa being banned from entering the United Nations.", isCorrect: false },
+              { text: "The division of South Africa into separate, sovereign racial homelands.", isCorrect: false }
+            ],
+            hint: "Universal suffrage means everyone gets to vote. How would this affect white minority control?",
+            explanation: "The achievement of universal suffrage led to South Africa's first fully democratic, multi-racial election in 1994, which Nelson Mandela won.",
+            visual: null
+          },
+          {
+            levelNum: 9,
+            title: "The Cambodian Genocide",
+            passage: "From: Loung Ung, First They Killed My Father (Khmer Rouge Testimony, 1975)\n\n“The soldiers of the Angkar (Khmer Rouge) entered Phnom Penh and ordered everyone to evacuate. They told us the US was going to bomb the city, but it was a lie. They forced millions of us into the countryside to work as slave labor on collective farms. They banned schools, books, money, and religion. Anyone who was educated, wore glasses, or spoke a foreign language was labeled an enemy of the revolution and executed...”",
+            question: "Based on this account, what was Pol Pot's goal for Cambodia?",
+            options: [
+              { text: "To create an agrarian communist society by purging all modern and intellectual elements.", isCorrect: true },
+              { text: "To modernize Cambodia using Western industrial and legal models.", isCorrect: false },
+              { text: "To establish a pro-Western constitutional monarchy with free-market trade.", isCorrect: false },
+              { text: "To align Cambodia with democratic nations under a security treaty.", isCorrect: false }
+            ],
+            hint: "The text describes evacuations to collective farms and executing the educated or bilingual.",
+            explanation: "The Khmer Rouge, led by Pol Pot, sought to establish an extreme, primitive agricultural commune, executing over 1.7 million Cambodians.",
+            visual: null
+          },
+          {
+            levelNum: 10,
+            title: "The Rwandan Genocide",
+            passage: "From: Human Rights Watch, Leave None to Tell the Story: Genocide in Rwanda, 1999\n\n“In 1994, extremist Hutu leaders orchestrated a systematic campaign of extermination against the Tutsi minority. Using state radio to spread dehumanizing propaganda and coordinate militias, they slaughtered over 800,000 Tutsis and moderate Hutus in 100 days. Despite clear warnings, the international community and UN peacekeepers withdrew, failing to intervene...”",
+            question: "Which problem of modern global governance is highlighted by this report?",
+            options: [
+              { text: "The failure of the international community to intervene and prevent genocide.", isCorrect: true },
+              { text: "The overproduction of consumer goods in developing agricultural economies.", isCorrect: false },
+              { text: "The military dominance of Tutsi forces over Western Europe.", isCorrect: false },
+              { text: "The peaceful resolution of ethnic tensions through regional trade alliances.", isCorrect: false }
+            ],
+            hint: "Read the final sentence detailing the response of the international community.",
+            explanation: "The 1994 Rwandan Genocide remains a tragic symbol of the international community's failure to enforce 'never again' promises.",
+            visual: null
+          },
+          {
+            levelNum: 11,
+            title: "Joseph Stiglitz: WTO Critiques",
+            passage: "From: Joseph Stiglitz, Globalization and Its Discontents, 2002\n\n“Globalization has had a profound impact. While proponents promised that open markets and international trade would raise living standards everywhere, the rules of global trade have often been written by wealthy nations to benefit themselves. Multinational corporations have exploited cheap labor and lax environmental laws in developing countries, leading to rising local inequality and environmental damage...”",
+            question: "According to Joseph Stiglitz, what is a major negative consequence of globalization?",
+            options: [
+              { text: "Trade rules benefit wealthy nations and lead to local inequality and environmental exploitation.", isCorrect: true },
+              { text: "Multinational corporations have stopped all trade with developing countries.", isCorrect: false },
+              { text: "Developing countries have banned foreign investments in their factories.", isCorrect: false },
+              { text: "The global gap between rich and poor has been completely eliminated.", isCorrect: false }
+            ],
+            hint: "Look at who writes the rules and what corporations do with cheap labor and lax environmental laws.",
+            explanation: "Nobel laureate Joseph Stiglitz critiques globalization for prioritizing corporate profits over local welfare in developing nations.",
+            visual: null
+          },
+          {
+            levelNum: 12,
+            title: "The Chinese Surveillance State",
+            passage: "From: State Council of China, Planning Outline for the Construction of a Social Credit System, 2014\n\n“The social credit system will evaluate the behavior of citizens using digital technology, artificial intelligence, and database tracking. Compliance with state laws, traffic regulations, financial behavior, and online speech will yield scores. Those with low scores will face restrictions on travel, internet access, civil service employment, and schooling...”",
+            question: "Based on this policy document, how does the Chinese state utilize modern digital technology?",
+            options: [
+              { text: "To monitor citizen behavior and restrict individual freedoms based on compliance.", isCorrect: true },
+              { text: "To encourage open, democratic elections without state surveillance.", isCorrect: false },
+              { text: "To eliminate the Communist Party's control over the economy.", isCorrect: false },
+              { text: "To offer free, unregulated internet access to rural populations.", isCorrect: false }
+            ],
+            hint: "The system tracks scores to impose 'restrictions on travel, internet access, employment, and schooling'.",
+            explanation: "China's Social Credit System is an example of digital authoritarianism, using modern technology to enforce obedience to the state.",
+            visual: null
+          },
+          {
+            levelNum: 13,
+            title: "The Arab Spring Dynamics",
+            passage: "From: Wael Ghonim, Revolution 2.0: The Power of the People is Greater Than the People in Power, 2011\n\n“Our Facebook page, 'We Are All Khaled Said', became a digital town square. We shared videos of police brutality and coordinated the January 25 protests in Tahrir Square. Social media allowed us to bypass state-controlled news and organize millions of citizens to demand the end of Mubarak's authoritarian rule...”",
+            question: "According to this passage, how did social media affect the Arab Spring in Egypt?",
+            options: [
+              { text: "It allowed citizens to bypass state media and organize protests against authoritarianism.", isCorrect: true },
+              { text: "It helped the government track and arrest all pro-democracy students.", isCorrect: false },
+              { text: "It was used to establish a strict, state-controlled digital credit system.", isCorrect: false },
+              { text: "It forced Western nations to intervene militarily to defend the regime.", isCorrect: false }
+            ],
+            hint: "The text notes that social media allowed citizens to 'bypass state-controlled news and organize millions'.",
+            explanation: "During the 2011 Arab Spring, social media was crucial for organizing, documenting, and spreading anti-government protests across North Africa.",
+            visual: null
+          },
+          {
+            levelNum: 14,
+            title: "Modern Sweatshops",
+            passage: "From: International Labour Organization (ILO), Global Report on Modern Child Labor and Forced Labor, 2021\n\n“In the globalized fast-fashion and tech industries, child labor remains a persistent human rights violation. In sub-Saharan Africa and Southeast Asia, children under 12 are found harvesting cocoa or mining cobalt used in lithium batteries. Driven by extreme poverty, they work in toxic conditions for pennies, supplying global market demands for cheap goods...”",
+            question: "According to the ILO report, what drives the continuation of modern child labor?",
+            options: [
+              { text: "Extreme local poverty and global market demands for cheap goods.", isCorrect: true },
+              { text: "The establishment of state-enforced education laws up to age 18.", isCorrect: false },
+              { text: "A decline in the global demand for electronics and fashion.", isCorrect: false },
+              { text: "Western nations importing agricultural labor directly from cities.", isCorrect: false }
+            ],
+            hint: "The text links this violation directly to 'extreme poverty' and 'global market demands for cheap goods'.",
+            explanation: "Despite international treaties, globalized production chains often rely on cheap, exploited child labor in developing countries to reduce retail costs.",
+            visual: null
+          },
+          {
+            levelNum: 15,
+            title: "The Paris Climate Agreement",
+            passage: "From: United Nations, Preamble of the Paris Climate Agreement, 2015\n\n“Acknowledging that climate change is a common concern of humankind, Parties should, when taking action to address climate change, respect, promote and consider their respective obligations on human rights, the right to health, the rights of indigenous peoples, local communities, migrants, children, persons with disabilities and people in vulnerable situations...”",
+            question: "According to the preamble, what must nations consider when addressing global climate change?",
+            options: [
+              { text: "Their human rights obligations, particularly to vulnerable and indigenous populations.", isCorrect: true },
+              { text: "The need to increase fossil fuel production to boost corporate profits.", isCorrect: false },
+              { text: "Banning all international trade and returning to closed isolated economies.", isCorrect: false },
+              { text: "Restricting the migration of citizens out of industrial cities.", isCorrect: false }
+            ],
+            hint: "Look at the list of obligations regarding 'human rights, the right to health, the rights of indigenous peoples, local communities...'.",
+            explanation: "The Paris Agreement acknowledges that environmental degradation and climate change are deeply connected to international human rights and social justice.",
+            visual: null
+          }
+        ]
+      }
+    ];
+
+    let teams = [{ name: "Team Alpha", score: 0 }];
+    let activeTeamIndex = 0;
+    
+    // Track level progress (1-15, 16 represents completed category)
+    let unlockedLevels = {
+      "Revolutions & Ideas": 1,
+      "Industrial & Economic Shifts": 1,
+      "Age of Imperialism": 1,
+      "World Wars & Fascism": 1,
+      "Decolonization & Modernization": 1,
+      "Globalization & Human Rights": 1
     };
 
-    // State Tracking
-    let currentRoom = null;
-    let currentQuestionIdx = 0;
-    let lifelines = { hint: true, fiftyFifty: true };
+    let activeLevel = null;
+    let activeCategoryName = null;
+    let selectedBtnElement = null;
+    let currentShuffledOptions = [];
+    let selectedOptionIdx = null;
 
-    function startRoom(roomKey) {
-        currentRoom = gameData[roomKey];
-        currentQuestionIdx = 0;
-        lifelines = { hint: true, fiftyFifty: true };
-        
-        document.getElementById('hub-screen').classList.add('hidden');
-        document.getElementById('game-screen').classList.remove('hidden');
-        document.getElementById('room-title').innerText = currentRoom.title;
-        
-        updateLifelineButtons();
-        loadQuestion();
-    }
-
-    function loadQuestion() {
-        document.getElementById('feedback').innerText = "";
-        document.getElementById('hint-box').style.display = "none";
-        document.getElementById('btn-next').classList.add('hidden');
-        
-        let qData = currentRoom.questions[currentQuestionIdx];
-        document.getElementById('stimulus-text').innerText = qData.stimulus;
-        document.getElementById('source-metadata').innerText = qData.source;
-        document.getElementById('question').innerText = qData.question;
-        
-        // Progress bar
-        let pct = (currentQuestionIdx / currentRoom.questions.length) * 100;
-        document.getElementById('progress-fill').style.width = pct + "%";
-
-        // Render options
-        let choicesDiv = document.getElementById('choices');
-        choicesDiv.innerHTML = "";
-        qData.choices.forEach((choice, index) => {
-            let btn = document.createElement('button');
-            btn.innerText = choice.text;
-            btn.id = `choice-${index}`;
-            btn.onclick = () => checkAnswer(choice.correct, index);
-            choicesDiv.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(isCorrect, index) {
-        let qData = currentRoom.questions[currentQuestionIdx];
-        let feedback = document.getElementById('feedback');
-        
-        // Disable choices after selection
-        qData.choices.forEach((_, i) => {
-            document.getElementById(`choice-${i}`).disabled = true;
-        });
-
-        if (isCorrect) {
-            feedback.innerText = "🎯 CORRECT! Your historical analysis is accurate.";
-            feedback.style.color = "var(--correct-color)";
-            document.getElementById(`choice-${index}`).style.backgroundColor = "var(--correct-color)";
-            document.getElementById('btn-next').classList.remove('hidden');
+    function setTeams(num) {
+      document.querySelectorAll('.team-select-btn').forEach((btn, idx) => {
+        if (idx === num - 1) {
+          btn.classList.add('bg-amber-500', 'text-slate-950', 'border-amber-500');
+          btn.classList.remove('bg-slate-800', 'text-slate-300', 'border-transparent');
         } else {
-            feedback.innerText = "❌ INCORRECT. Review the document and try again.";
-            feedback.style.color = "var(--incorrect-color)";
-            document.getElementById(`choice-${index}`).style.backgroundColor = "var(--incorrect-color)";
-            
-            // Allow retry after 2 seconds
-            setTimeout(() => {
-                qData.choices.forEach((_, i) => {
-                    document.getElementById(`choice-${i}`).disabled = false;
-                    document.getElementById(`choice-${i}`).style.backgroundColor = "#334155";
-                });
-                feedback.innerText = "";
-            }, 2000);
+          btn.classList.remove('bg-amber-500', 'text-slate-950', 'border-amber-500');
+          btn.classList.add('bg-slate-800', 'text-slate-300', 'border-transparent');
         }
+      });
+
+      const container = document.getElementById('team-names-container');
+      container.innerHTML = '<label class="block text-xs font-bold uppercase tracking-wider text-slate-400">Team Names</label>';
+      const defaultNames = ["Team Alpha", "Team Bravo", "Team Charlie", "Team Delta"];
+      for (let i = 0; i < num; i++) {
+        container.innerHTML += `
+          <input type="text" id="team-name-input-${i}" value="${defaultNames[i]}" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-slate-100 focus:outline-none focus:border-amber-500 text-xs mb-1">
+        `;
+      }
     }
 
-    function useHint() {
-        if (!lifelines.hint) return;
-        lifelines.hint = false;
-        updateLifelineButtons();
-        
-        let hintBox = document.getElementById('hint-box');
-        hintBox.innerText = "🔎 HINT: " + currentRoom.questions[currentQuestionIdx].hint;
-        hintBox.style.display = "block";
-    }
-
-    function useFiftyFifty() {
-        if (!lifelines.fiftyFifty) return;
-        lifelines.fiftyFifty = false;
-        updateLifelineButtons();
-        
-        let qData = currentRoom.questions[currentQuestionIdx];
-        qData.fiftyWrong.forEach(index => {
-            let btn = document.getElementById(`choice-${index}`);
-            if(btn) {
-                btn.style.opacity = "0";
-                btn.disabled = true;
-                btn.style.cursor = "default";
-            }
+    function startGame() {
+      const inputs = document.querySelectorAll('[id^="team-name-input-"]');
+      teams = [];
+      inputs.forEach(input => {
+        teams.push({
+          name: input.value.trim() || "Sovereign Forces",
+          score: 0
         });
+      });
+
+      document.getElementById('setup-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+
+      buildCampaignMap();
+      updateScoreboard();
+      updateActiveTurn();
     }
 
-    function updateLifelineButtons() {
-        document.getElementById('btn-hint').disabled = !lifelines.hint;
-        document.getElementById('btn-fifty').disabled = !lifelines.fiftyFifty;
+    function buildCampaignMap() {
+      const board = document.getElementById('campaign-columns-container');
+      board.innerHTML = '';
+
+      CAMPAIGN_DATA.forEach(cat => {
+        const currentUnlock = unlockedLevels[cat.category];
+        const isComplete = currentUnlock > 15;
+        
+        let colHTML = `
+          <div class="flex flex-col gap-2 min-w-[210px] bg-slate-900/40 p-3 rounded-2xl border ${isComplete ? 'border-emerald-500/40 bg-emerald-950/5' : 'border-slate-800/80'} backdrop-blur-sm">
+            <!-- Category Banner Header -->
+            <div class="bg-gradient-to-b from-slate-900 to-slate-950 p-2.5 rounded-xl border ${isComplete ? 'border-emerald-500/50' : 'border-slate-800'} text-center shadow-md min-h-[56px] flex flex-col justify-center">
+              <h3 class="text-[11px] font-black ${isComplete ? 'text-emerald-400' : 'text-amber-400'} uppercase tracking-wider leading-tight heading-font">${cat.category}</h3>
+              <p class="text-[8px] text-slate-500 font-bold uppercase mt-0.5">
+                ${isComplete ? '🥇 CONQUERED!' : 'unlocked: ' + currentUnlock + '/15'}
+              </p>
+            </div>
+            <!-- Path node (Levels 1-15) -->
+            <div class="flex flex-col gap-1 relative mt-1">
+        `;
+
+        cat.levels.forEach(lvl => {
+          const isUnlocked = lvl.levelNum <= currentUnlock;
+          const isBeaten = lvl.levelNum < currentUnlock || isComplete;
+          const isActive = lvl.levelNum === currentUnlock && !isComplete;
+
+          let btnClass = "w-full py-1 px-2 rounded-lg border font-bold text-[10px] flex items-center justify-between level-node shadow-sm transition-all ";
+          let statusBadge = "";
+
+          if (isBeaten) {
+            btnClass += "bg-emerald-950/40 border-emerald-500/40 text-emerald-300 hover:bg-emerald-900/30";
+            statusBadge = `<span class="text-emerald-400 text-[9px]">✔</span>`;
+          } else if (isActive) {
+            btnClass += "bg-amber-500 text-slate-950 border-amber-400 font-extrabold animate-pulse";
+            statusBadge = `<span class="bg-slate-950 text-amber-400 px-1 py-0.5 rounded text-[7px] font-black uppercase">GO</span>`;
+          } else {
+            btnClass += "bg-slate-950/60 border-slate-900 text-slate-600 cursor-not-allowed opacity-40";
+            statusBadge = `<span class="text-[9px]">🔒</span>`;
+          }
+
+          colHTML += `
+            <button 
+              id="btn-${cat.shortName}-${lvl.levelNum}"
+              ${!isUnlocked ? 'disabled' : ''}
+              onclick="openLevel('${cat.category}', ${lvl.levelNum}, this)"
+              class="${btnClass}">
+              <span>Stage ${lvl.levelNum}</span>
+              ${statusBadge}
+            </button>
+          `;
+        });
+
+        colHTML += `</div></div>`;
+        board.innerHTML += colHTML;
+      });
     }
 
-    function nextQuestion() {
-        currentQuestionIdx++;
-        if (currentQuestionIdx >= currentRoom.questions.length) {
-            // Room Complete! Make the progress bar 100% just before hiding
-            document.getElementById('progress-fill').style.width = "100%";
-            setTimeout(() => {
-                document.getElementById('game-screen').classList.add('hidden');
-                document.getElementById('victory-screen').classList.remove('hidden');
-            }, 500);
+    function updateScoreboard() {
+      const container = document.getElementById('scoreboard');
+      container.innerHTML = '';
+      teams.forEach((team, idx) => {
+        const isCurrent = idx === activeTeamIndex;
+        container.innerHTML += `
+          <div class="flex items-center gap-2 bg-slate-950 p-2 rounded-xl border ${isCurrent ? 'border-amber-400 shadow-lg shadow-amber-400/5' : 'border-slate-800'} text-[11px]">
+            <div class="text-left">
+              <p class="font-bold text-slate-200 text-[9px] ${isCurrent ? 'text-amber-400' : ''}">${team.name}</p>
+              <p class="heading-font font-extrabold text-amber-400 tracking-wider">${team.score < 0 ? '-' : ''}$${Math.abs(team.score)} PTS</p>
+            </div>
+            <div class="flex flex-col gap-0.5 ml-1.5">
+              <button onclick="adjustScore(${idx}, 100)" class="text-[7px] bg-slate-850 hover:bg-slate-700 text-emerald-400 px-1 rounded font-extrabold">+100</button>
+              <button onclick="adjustScore(${idx}, -100)" class="text-[7px] bg-slate-850 hover:bg-slate-700 text-red-400 px-1 rounded font-extrabold">-100</button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function adjustScore(idx, amount) {
+      teams[idx].score += amount;
+      updateScoreboard();
+    }
+
+    function updateActiveTurn() {
+      document.getElementById('current-turn-display').innerText = teams[activeTeamIndex].name;
+    }
+
+    function nextTurn() {
+      activeTeamIndex = (activeTeamIndex + 1) % teams.length;
+      updateActiveTurn();
+      updateScoreboard();
+    }
+
+    function shuffleOptions(options) {
+      let shuffled = options.map((opt, idx) => ({ ...opt, originalIdx: idx }));
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
+    function openLevel(catCategory, levelNum, btnElement) {
+      const category = CAMPAIGN_DATA.find(c => c.category === catCategory);
+      activeLevel = category.levels.find(l => l.levelNum === levelNum);
+      activeCategoryName = catCategory;
+      selectedBtnElement = btnElement;
+
+      document.getElementById('modal-level-badge').innerText = `LEVEL ${activeLevel.levelNum}`;
+      document.getElementById('modal-category').innerText = catCategory;
+      document.getElementById('modal-value').innerText = `${activeLevel.levelNum * 100} PTS`;
+      
+      const passageContainer = document.getElementById('modal-passage-container');
+      if (activeLevel.passage) {
+        document.getElementById('modal-passage').innerText = activeLevel.passage;
+        passageContainer.classList.remove('hidden');
+      } else {
+        passageContainer.classList.add('hidden');
+      }
+      
+      document.getElementById('modal-question-text').innerText = activeLevel.question;
+      document.getElementById('answering-team-label').innerText = teams[activeTeamIndex].name;
+
+      document.getElementById('modal-explanation').classList.add('hidden');
+      document.getElementById('modal-hint').classList.add('hidden');
+      document.getElementById('modal-action-btn').classList.remove('hidden');
+      document.getElementById('modal-cancel-btn').classList.remove('hidden');
+      document.getElementById('modal-close-btn').classList.add('hidden');
+      selectedOptionIdx = null;
+
+      currentShuffledOptions = shuffleOptions(activeLevel.options);
+      buildOptionsGrid();
+
+      document.getElementById('question-modal').classList.remove('hidden');
+    }
+
+    function buildOptionsGrid() {
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      currentShuffledOptions.forEach((opt, idx) => {
+        container.innerHTML += `
+          <button 
+            onclick="selectOption(${idx})"
+            class="option-btn text-left p-3 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-800/60 hover:border-slate-700 text-xs transition duration-150 flex items-start gap-2">
+            <span class="bg-slate-800 text-slate-400 rounded-lg w-5 h-5 flex items-center justify-center font-bold text-[10px] shrink-0">${idx + 1}</span>
+            <span class="text-slate-200 leading-normal">${opt.text}</span>
+          </button>
+        `;
+      });
+    }
+
+    function selectOption(idx) {
+      selectedOptionIdx = idx;
+      document.querySelectorAll('.option-btn').forEach((btn, bIdx) => {
+        if (bIdx === idx) {
+          btn.classList.add('border-amber-400', 'bg-amber-400/10');
+          btn.classList.remove('border-slate-800', 'bg-slate-950/40');
         } else {
-            loadQuestion();
+          btn.classList.remove('border-amber-400', 'bg-amber-400/10');
+          btn.classList.add('border-slate-800', 'bg-slate-950/40');
         }
+      });
     }
 
-    function returnToHub() {
-        document.getElementById('victory-screen').classList.add('hidden');
-        document.getElementById('hub-screen').classList.remove('hidden');
+    function revealHint() {
+      const hint = document.getElementById('modal-hint');
+      hint.innerText = activeLevel.hint;
+      hint.classList.toggle('hidden');
     }
-</script>
 
+    function cancelQuestion() {
+      document.getElementById('question-modal').classList.add('hidden');
+      activeLevel = null;
+      activeCategoryName = null;
+      selectedOptionIdx = null;
+    }
+
+    function submitAnswer() {
+      if (selectedOptionIdx === null) {
+        const container = document.getElementById('options-container');
+        const alertBox = document.createElement('div');
+        alertBox.className = "col-span-full bg-amber-500/15 border border-amber-500/40 text-amber-300 rounded-xl p-3 text-xs font-bold text-center animate-bounce";
+        alertBox.innerText = "⚠️ You must select a choice before submitting!";
+        container.appendChild(alertBox);
+        setTimeout(() => alertBox.remove(), 2500);
+        return;
+      }
+
+      const selectedOption = currentShuffledOptions[selectedOptionIdx];
+      const isCorrect = selectedOption.isCorrect;
+      const points = activeLevel.levelNum * 100;
+      const currentTeam = teams[activeTeamIndex];
+
+      playSound(isCorrect ? 'correct' : 'wrong');
+
+      if (isCorrect) {
+        currentTeam.score += points;
+        let prevUnlock = unlockedLevels[activeCategoryName];
+        if (activeLevel.levelNum === prevUnlock) {
+          if (prevUnlock < 15) {
+            unlockedLevels[activeCategoryName] = prevUnlock + 1;
+            setTimeout(() => playSound('unlock'), 400);
+          } else if (prevUnlock === 15) {
+            unlockedLevels[activeCategoryName] = 16; 
+            setTimeout(() => triggerCategoryCelebration(activeCategoryName), 500);
+          }
+        }
+      } else {
+        currentTeam.score -= Math.round(points / 2);
+      }
+
+      const status = document.getElementById('explanation-status');
+      const expText = document.getElementById('explanation-text');
+      const box = document.getElementById('modal-explanation');
+
+      if (isCorrect) {
+        status.innerText = `✅ Verdict Correct! (+$${points} PTS)`;
+        status.className = "font-black text-emerald-400 text-xs uppercase tracking-wider";
+        box.className = "bg-slate-950 p-4 rounded-xl border-l-4 border-emerald-500 space-y-1.5";
+      } else {
+        status.innerText = `❌ Verdict Faulty! (-$${Math.round(points / 2)} PTS)`;
+        status.className = "font-black text-red-400 text-xs uppercase tracking-wider";
+        box.className = "bg-slate-950 p-4 rounded-xl border-l-4 border-red-500 space-y-1.5";
+      }
+
+      const originalCorrectOption = activeLevel.options.find(o => o.isCorrect).text;
+      expText.innerHTML = `
+        <p class="mb-2 text-xs"><strong class="text-amber-400">Correct Regents Answer:</strong> ${originalCorrectOption}</p>
+        <p class="text-[11px] text-slate-400 leading-relaxed">${activeLevel.explanation}</p>
+      `;
+
+      box.classList.remove('hidden');
+
+      document.querySelectorAll('.option-btn').forEach((btn, bIdx) => {
+        btn.onclick = null;
+        const opt = currentShuffledOptions[bIdx];
+        if (opt.isCorrect) {
+          btn.className = "text-left p-3 rounded-xl border border-emerald-500 bg-emerald-500/10 text-xs font-medium flex items-start gap-2";
+        } else if (bIdx === selectedOptionIdx) {
+          btn.className = "text-left p-3 rounded-xl border border-red-500 bg-red-500/10 text-xs font-medium flex items-start gap-2";
+        } else {
+          btn.className = "text-left p-3 rounded-xl border border-slate-855 bg-slate-950/20 text-xs font-medium flex items-start gap-2 opacity-40";
+        }
+      });
+
+      document.getElementById('modal-action-btn').classList.add('hidden');
+      document.getElementById('modal-cancel-btn').classList.add('hidden');
+      document.getElementById('modal-close-btn').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('question-modal').classList.add('hidden');
+      buildCampaignMap();
+      
+      if (!checkGameVictory()) {
+        nextTurn();
+      }
+    }
+
+    let confettiActive = false;
+    let confettiInterval = null;
+
+    function runConfetti(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      const particles = [];
+      const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6'];
+
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 4 + 2,
+          d: Math.random() * canvas.height,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.random() * 10 - 5,
+          tiltAngleIncremental: Math.random() * 0.07 + 0.02,
+          tiltAngle: 0
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p, idx) => {
+          p.tiltAngle += p.tiltAngleIncremental;
+          p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+          p.x += Math.sin(p.tiltAngle);
+          p.tilt = Math.sin(p.tiltAngle - idx / 3) * 15;
+
+          if (p.y > canvas.height) {
+            p.x = Math.random() * canvas.width;
+            p.y = -20;
+            p.tilt = Math.random() * 10 - 5;
+          }
+
+          ctx.beginPath();
+          ctx.lineWidth = p.r;
+          ctx.strokeStyle = p.color;
+          ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+          ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+          ctx.stroke();
+        });
+      }
+
+      confettiActive = true;
+      confettiInterval = setInterval(draw, 20);
+    }
+
+    function stopConfetti() {
+      clearInterval(confettiInterval);
+      confettiActive = false;
+    }
+
+    function triggerCategoryCelebration(catName) {
+      playSound('victory');
+      document.getElementById('completed-category-title').innerText = `${catName} Conquered!`;
+      document.getElementById('category-celebration-modal').classList.remove('hidden');
+      runConfetti('category-confetti');
+    }
+
+    function closeCategoryCelebration() {
+      stopConfetti();
+      document.getElementById('category-celebration-modal').classList.add('hidden');
+      buildCampaignMap();
+      if (!checkGameVictory()) {
+        nextTurn();
+      }
+    }
+
+    function checkGameVictory() {
+      const categories = Object.keys(unlockedLevels);
+      const allComplete = categories.every(cat => unlockedLevels[cat] >= 16);
+      if (allComplete) {
+        setTimeout(() => {
+          playSound('victory');
+          document.getElementById('game-victory-modal').classList.remove('hidden');
+          runConfetti('victory-confetti');
+        }, 500);
+        return true;
+      }
+      return false;
+    }
+
+    function resetGame() {
+      stopConfetti();
+      document.getElementById('game-victory-modal').classList.add('hidden');
+      document.getElementById('setup-screen').classList.remove('hidden');
+      document.getElementById('game-screen').classList.add('hidden');
+      
+      unlockedLevels = {
+        "Revolutions & Ideas": 1,
+        "Industrial & Economic Shifts": 1,
+        "Age of Imperialism": 1,
+        "World Wars & Fascism": 1,
+        "Decolonization & Modernization": 1,
+        "Globalization & Human Rights": 1
+      };
+      activeTeamIndex = 0;
+    }
+
+    let studyModeActive = false;
+    function toggleStudyMode() {
+      studyModeActive = !studyModeActive;
+      const gameScreen = document.getElementById('game-screen');
+      const studyScreen = document.getElementById('study-mode-screen');
+
+      if (studyModeActive) {
+        gameScreen.classList.add('hidden');
+        studyScreen.classList.remove('hidden');
+        buildStudySheet();
+      } else {
+        studyScreen.classList.add('hidden');
+        gameScreen.classList.remove('hidden');
+      }
+    }
+
+    function buildStudySheet() {
+      const list = document.getElementById('study-list');
+      list.innerHTML = '';
+
+      CAMPAIGN_DATA.forEach(cat => {
+        let catHTML = `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-md">
+            <h3 class="text-md font-black text-amber-400 tracking-wide border-b border-slate-800 pb-2 uppercase heading-font">${cat.category}</h3>
+            <div class="space-y-4">
+        `;
+
+        cat.levels.forEach(lvl => {
+          const correctOpt = lvl.options.find(o => o.isCorrect).text;
+
+          catHTML += `
+            <div class="p-4 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-2.5">
+              <div class="flex justify-between items-center text-[10px] font-bold text-slate-500 uppercase">
+                <span>Stage ${lvl.levelNum} Practice Profile</span>
+                <span class="bg-slate-800 px-2.5 py-0.5 rounded text-amber-300">Verified Answer</span>
+              </div>
+              <p class="font-bold text-amber-400 tracking-wide text-sm">${lvl.title}</p>
+              ${lvl.passage ? `<p class="font-medium text-slate-300 whitespace-pre-line bg-slate-900/40 p-3 rounded-lg border border-slate-800/60 leading-relaxed font-mono">${lvl.passage}</p>` : ''}
+              <p class="font-extrabold text-slate-100">Question: ${lvl.question}</p>
+              <div class="p-3 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                <p class="text-[10px] font-bold text-emerald-400 uppercase">⭐ CORRECT REGENTS ANSWER:</p>
+                <p class="text-slate-200 mt-1 font-bold">${correctOpt}</p>
+              </div>
+              <div class="text-[11px] text-slate-450 space-y-1">
+                <p class="font-bold text-slate-300">Core Rationale:</p>
+                <p class="leading-relaxed text-slate-400">${lvl.explanation}</p>
+              </div>
+            </div>
+          `;
+        });
+
+        catHTML += `</div></div>`;
+        list.innerHTML += catHTML;
+      });
+    }
+
+    window.onload = function() {
+      setTeams(1);
+    };
+  </script>
 </body>
 </html>
